@@ -14,7 +14,7 @@ import {
 } from '@ionic/react';
 import './Home.css';
 
-const Home: React.FC = () => {
+const Home1: React.FC = () => {
 
   const [messages, setMessages] = useState<Message[]>([]);
 
@@ -57,4 +57,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default Home1;
