@@ -22,6 +22,9 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import Profile from './pages/Profile';
+import ProfileEdit from './pages/ProfileEdit';
+import ProfileOther from './pages/ProfileOther';
 
 setupIonicReact();
 
@@ -37,6 +40,15 @@ const App: React.FC = () => (
         </Route>
         <Route path="/message/:id">
            <ViewMessage />
+        </Route>
+        <Route path="/profile">
+           <Profile />
+        </Route>
+        <Route path="/profile/edit">
+           <ProfileEdit />
+        </Route>
+        <Route path="/profile/other">
+           <ProfileOther />
         </Route>
       </IonRouterOutlet>
     </IonReactRouter>
