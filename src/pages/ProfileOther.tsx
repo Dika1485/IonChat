@@ -3,7 +3,7 @@ import { useParams } from 'react-router';
 import { arrowBackOutline, colorFill } from 'ionicons/icons';
 import styles from './Profile.module.scss';
 
-const Profile: React.FC = () => {
+const ProfileOther: React.FC = () => {
 
     return (
         <IonPage className={styles.home}>
@@ -29,35 +29,25 @@ const Profile: React.FC = () => {
               src="https://docs-demo.ionic.io/assets/madison.jpg"
               alt="The Wisconsin State Capitol building in Madison, WI at night"
             />
-            </IonCol>
-             <IonCol></IonCol>
-					</IonRow>
-          <IonRow>
-            <IonCol></IonCol>
-            <IonCol className={styles.Profil} size="8" sizeLg='8' sizeMd='8' sizeSm='8' sizeXl='8' sizeXs='8'>
-            <IonText><h3>Name</h3><p>Your name</p></IonText>	
-            <IonText><h3>Email</h3><p>Your email</p></IonText> 
-            <IonText><h3>Username</h3><p>@sdls</p></IonText>
-            <IonText><h3>Password</h3><p>your password</p></IonText>
-            <IonText><h3>Date of Birth</h3><p>your date</p></IonText>
-            </IonCol>
-            <IonCol></IonCol>
-          </IonRow>
-          <IonRow className="ion-justify-content-center ion-text-center">
-            <IonCol></IonCol>
-            <IonCol size="8" sizeLg='8' sizeMd='8' sizeSm='8' sizeXl='8' sizeXs='10'>
-            <IonButton className={styles.tombolEdit}>Edit Profile</IonButton>
+            <IonRow className="ion-justify-content-center ion-text-center">
+            <IonText className={styles.profileOther}><h3>Your name</h3>
+            <p>@username</p>
+            <p>email</p>
+            </IonText>
+            </IonRow>
+            <IonRow className="ion-justify-content-center ion-text-center">
+            <IonText className={styles.GroupFriends}>
+            <h5 className={styles.totalFriends}>70</h5>
+            <p>friends</p>
+            </IonText>
+            </IonRow>
+            <IonButton className={styles.tombolAdd}>Add Friend</IonButton>
             </IonCol>
             <IonCol></IonCol>
           </IonRow>
 		</IonGrid>
-	  		
-          
-           
-          
-            
             </IonContent>
         </IonPage>
   );
 };
-export default Profile;
+export default ProfileOther;
