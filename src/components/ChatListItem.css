@@ -13,7 +13,7 @@ ion-list {
   margin-bottom: 12px;
 }
 
-ion-item p {
+.chat-item p {
   background-color: #4D8B4C;
   color: white;
   padding: 7px;
@@ -28,23 +28,23 @@ ion-item p {
   width: 95%;
 } */
 
-ion-item .date {
+.chat-item .date {
   float: right;
   align-items: center;
   display: flex;
 }
 
-ion-item ion-icon {
+.chat-item ion-icon {
   color: #c9c9ca;
 }
 
-ion-item ion-note {
+.chat-item ion-note {
   font-size: 2px;
   font-weight: normal;
   color: whitesmoke;
 }
 
-ion-item ion-note.md {
+.chat-item ion-note.md {
   margin-right: 14px;
 }
 

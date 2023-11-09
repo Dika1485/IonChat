@@ -13,7 +13,7 @@ interface MessageListItemProps {
 
 const ChatListItem: React.FC<MessageListItemProps> = ({ message }) => {
   return (
-    <IonItem detail={false} lines='none'>
+    <IonItem detail={false} lines='none' className='chat-item'>
       <IonList className="ion-text-wrap">
         <p>{message.subject}
           <span className="date">

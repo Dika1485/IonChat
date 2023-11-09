@@ -38,11 +38,11 @@ const Home: React.FC = () => {
                     <IonSearchbar showClearButton="focus"></IonSearchbar>
                 </IonToolbar>
             </IonHeader>
-            <IonCard>
+            <IonCard className="home-card">
                 <IonCardContent>
                     <IonList>
                         {items.map((item, index) => (
-                        <IonItem key={item}>
+                        <IonItem key={item} className="home-item">
                             <IonAvatar slot="start">
                             <img src={'https://picsum.photos/80/80?random=' + index} alt="avatar" />
                             </IonAvatar>

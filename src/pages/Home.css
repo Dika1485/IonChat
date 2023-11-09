@@ -25,7 +25,7 @@ ion-title {
     padding-top: 20px;
 }
 
-ion-card {
+.home-card {
     overflow: scroll;
     height: 600px;
     /* Hide scrollbar */
@@ -43,13 +43,13 @@ ion-card {
     margin: 0;
 }
 
-ion-item .date {
+.home-item .date {
     float: right;
     align-items: center;
     display: flex;
 }
 
-ion-item p {
+.home-item p {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
