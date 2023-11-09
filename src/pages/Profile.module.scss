@@ -1,0 +1,126 @@
+.home {
+    ion-header {
+        &.header-md:after {
+            background: none;
+        }
+    }
+    ion-header,
+    ion-toolbar {
+        border: none !important;
+        --border-style: none !important;
+        border-color: none !important;
+        border-bottom: none !important;
+    }
+}
+
+.topHeader {
+    height: 30%;
+    margin-bottom: -100px;
+    background-color: #4D8B4C;
+}
+
+.ioncenter {
+    justify-content: center;
+}
+
+.imageset {
+    width: 200px;
+    height: 200px;
+    border-radius: 100%;
+    border-style: solid;
+    border-color: #4D8B4C;
+    border-width: 2px;
+    padding: 5px;
+    margin-bottom: 20px;
+    background-color: white;
+}
+
+.avatar {
+    border-radius: 10px;
+}
+
+@media only screen and (max-width: 576px) {
+    .topHeader {
+        margin-bottom: -80px;
+    }
+    .imageset {
+        height: 150px;
+        width: 150px;
+        border-radius: 100px;
+    }
+}
+
+ion-text {
+    font-family: Impact 'Arial Narrow Bold';
+}
+
+ion-text h3 {
+    font-size: x-large;
+    font-weight: bold;
+}
+
+ion-text p {
+    font-weight: normal;
+    font-size: 20px;
+}
+
+.profileOther h3 {
+    font-size: xx-large;
+    line-height: 18px;
+}
+
+.profileOther p {
+    font-size: 23px;
+    line-height: 18px;
+}
+
+.profileOther {
+    margin-bottom: 25px;
+}
+
+.GroupFriends p {
+    font-size: 23px;
+    line-height: 12px;
+}
+
+.totalFriends {
+    line-height: 15px;
+    color: #4D8B4C;
+    font-size: 45px;
+}
+
+.tombolEdit {
+    height: 45px;
+    --border-radius: 20px;
+    --background: #4D8B4C;
+    --color: white;
+    margin-top: 50px;
+}
+
+.tombolAdd {
+    height: 45px;
+    --border-radius: 20px;
+    --background: #4D8B4C;
+    --color: white;
+    margin-top: 30px;
+}
+
+.tombolEdit:hover {
+    --background: #72cc6f;
+}
+
+ion-modal .exampleModal {
+    --height: 50%;
+    --border-radius: 16px;
+    --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+ion-modal .exampleModal::part(backdrop) {
+    background: rgba(209, 213, 219);
+    opacity: 1;
+}
+
+ion-modal .exampleModal ion-toolbar {
+    --background: rgb(14 116 144);
+    --color: white;
+}
