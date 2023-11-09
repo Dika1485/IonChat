@@ -1,7 +1,7 @@
 import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import Home from './pages/Home';
+import Home from './pages/Home1';
 import ViewMessage from './pages/ViewMessage';
 
 /* Core CSS required for Ionic components to work properly */
@@ -44,7 +44,7 @@ const App: React.FC = () => (
         <Route path="/profile">
            <Profile />
         </Route>
-        <Route path="/profile/edit">
+        <Route path="/profile/::id">
            <ProfileEdit />
         </Route>
         <Route path="/profile/other">
