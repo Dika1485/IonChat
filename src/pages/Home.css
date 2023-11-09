@@ -1,0 +1,22 @@
+ion-toolbar {
+    --color: white;
+    --background: #4D8B4C;
+}
+
+ion-title {
+    text-align: center;
+    margin-left: -30px;
+}
+
+.search-bar {
+    padding: 20px;
+}
+
+.search-bar ion-searchbar {
+    --border-radius: 20px;
+}
+
+#logo-white {
+    font-size: 48px;
+    padding-top: 20px;
+}
