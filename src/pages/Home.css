@@ -1,15 +1,15 @@
 html {
-    background-color: #4D8B4C;
+    background-color: var(--ion-color-main);
 }
 
 ion-toolbar {
     --color: white;
-    --background: #4D8B4C;
+    --background: var(--ion-color-main);
 }
 
 ion-title {
     text-align: center;
-    margin-left: -30px;
+    margin-left: -50px;
 }
 
 .search-bar {
@@ -23,6 +23,11 @@ ion-title {
 #logo-white {
     font-size: 48px;
     padding-top: 20px;
+}
+
+#logo-white-small {
+    font-size: 24px;
+    padding-right: 10px;
 }
 
 .home-card {

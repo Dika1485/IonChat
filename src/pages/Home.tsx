@@ -1,7 +1,8 @@
-import { IonAvatar, IonButtons, IonCard, IonCardContent, IonContent, IonHeader, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonLabel, IonList, IonMenu, IonMenuButton, IonNote, IonPage, IonSearchbar, IonTitle, IonToolbar } from "@ionic/react";
+import { IonAvatar, IonButtons, IonCard, IonCardContent, IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonLabel, IonList, IonMenu, IonMenuButton, IonMenuToggle, IonNote, IonPage, IonSearchbar, IonTitle, IonToolbar } from "@ionic/react";
 import './Home.css';
 import logo from '../assets/logo_bw.svg';
 import { useEffect, useState } from "react";
+import { chatbubbleEllipses, logOut, settings } from "ionicons/icons";
 
 const Home: React.FC = () => {
     const [items, setItems] = useState<string[]>([]);
@@ -22,7 +23,37 @@ const Home: React.FC = () => {
     return (
         <>
         <IonMenu contentId="main-content">
-            <IonContent>Ini adalah menu</IonContent>
+            <IonHeader className="ion-no-border">
+                <IonToolbar>
+                    <IonTitle>
+                        <IonIcon id="logo-white-small" src={logo} aria-hidden={true}></IonIcon>
+                        Ion Chat
+                    </IonTitle>
+                </IonToolbar>
+            </IonHeader>
+            <IonContent className="ion-padding">
+                <IonMenuToggle>
+                    <IonItem lines="full" routerLink="/profile">
+                        <IonAvatar slot="start">
+                            <img src="https://i.pinimg.com/736x/a9/a6/39/a9a639dcf7f91a7d733a8f5fafe0a668.jpg" alt="NingBao" />
+                        </IonAvatar>
+                        <IonLabel>
+                            <h2><b>Ning Bao</b></h2>
+                            <p>ningbao@gmail.com</p>
+                        </IonLabel>
+                    </IonItem>
+                </IonMenuToggle>
+                <IonList lines="none">
+                    <IonItem href="#">
+                        <IonIcon aria-hidden={true} icon={settings} slot="start" color="dark"></IonIcon>
+                        <IonLabel>Settings</IonLabel>
+                    </IonItem>
+                    <IonItem href="#">
+                        <IonIcon aria-hidden={true} icon={logOut} slot="start" color="dark"></IonIcon>
+                        <IonLabel>Logout</IonLabel>
+                    </IonItem>
+                </IonList>
+            </IonContent>
         </IonMenu>
         <IonPage id="main-content">
             <IonHeader className="ion-no-border">
@@ -38,11 +69,16 @@ const Home: React.FC = () => {
                     <IonSearchbar showClearButton="focus"></IonSearchbar>
                 </IonToolbar>
             </IonHeader>
+            <IonFab slot="fixed" vertical="bottom" horizontal="end">
+                <IonFabButton color="main">
+                    <IonIcon icon={chatbubbleEllipses} color="light"></IonIcon>
+                </IonFabButton>
+            </IonFab>
             <IonCard className="home-card">
                 <IonCardContent>
-                    <IonList>
+                    <IonList lines="none">
                         {items.map((item, index) => (
-                        <IonItem key={item} className="home-item">
+                        <IonItem key={item} className="home-item" routerLink="/chat">
                             <IonAvatar slot="start">
                             <img src={'https://picsum.photos/80/80?random=' + index} alt="avatar" />
                             </IonAvatar>
