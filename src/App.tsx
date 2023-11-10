@@ -52,7 +52,7 @@ const App: React.FC = () => (
         <Route path="/profile">
            <Profile />
         </Route>
-        <Route path="/profile/::id">
+        <Route path="/editprofile">
            <ProfileEdit />
         </Route>
         <Route path="/profile/other">

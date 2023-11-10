@@ -16,7 +16,15 @@
 .topHeader {
     height: 30%;
     margin-bottom: -100px;
-    background-color: #4D8B4C;
+    background-color: var(--ion-color-main);
+}
+
+.fakeTop {
+    margin-top: 70px;
+    height: 50px;
+    width: 100%;
+    border-radius: 20px;
+    background-color: white;
 }
 
 .ioncenter {
@@ -31,6 +39,7 @@
     border-color: #4D8B4C;
     border-width: 2px;
     padding: 5px;
+    margin-top: -150px;
     margin-bottom: 20px;
     background-color: white;
 }
@@ -43,7 +52,11 @@
     .topHeader {
         margin-bottom: -80px;
     }
+    .fakeTop {
+        margin-top: 60px;
+    }
     .imageset {
+        margin-top: -130px;
         height: 150px;
         width: 150px;
         border-radius: 100px;
@@ -94,7 +107,7 @@ ion-text p {
     --border-radius: 20px;
     --background: #4D8B4C;
     --color: white;
-    margin-top: 50px;
+    margin-top: 10px;
 }
 
 .tombolAdd {
