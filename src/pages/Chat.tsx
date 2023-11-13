@@ -15,6 +15,9 @@ import {
   useIonViewWillEnter,
   IonAvatar,
   IonList,
+  IonInput,
+  IonRow,
+  IonCol,
 } from '@ionic/react';
 import { personCircle } from 'ionicons/icons';
 import { useParams } from 'react-router';
@@ -53,6 +56,18 @@ function Chat() {
         <IonList className="ion-padding">
           {messages.map(m => <ChatListItem key={m.id} message={m} />)}
         </IonList>
+        <IonToolbar className='search-bar'>
+          <IonRow>
+          <IonCol>
+            <IonInput placeholder='Enter Text'></IonInput>
+          </IonCol>
+          <IonCol>
+          <IonButtons>
+            <IonButton>Send</IonButton>
+          </IonButtons>
+          </IonCol>
+          </IonRow>
+        </IonToolbar>
       </IonContent>
     </IonPage>
   );

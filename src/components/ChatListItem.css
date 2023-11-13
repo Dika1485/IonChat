@@ -19,6 +19,7 @@ ion-list {
   padding: 7px;
   border: solid #4D8B4C;
   border-radius: 20px;
+  margin: 0px;
 }
 
 /* ion-item p {
