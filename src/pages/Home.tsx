@@ -3,8 +3,35 @@ import './Home.css';
 import logo from '../assets/logo_bw.svg';
 import { useEffect, useState } from "react";
 import { chatbubbleEllipses, logOut, settings } from "ionicons/icons";
+import { app, getDB } from '../firebaseConfig';
+import { getAuth, signOut } from 'firebase/auth';
+import { useHistory } from "react-router";
+
+// Initialize firebase
+app;
 
 const Home: React.FC = () => {
+    const history = useHistory();
+
+    // Cek apakah user sudah login
+    const auth = getAuth();
+    if (auth.currentUser == null) {
+        history.replace('/login');
+    }
+
+    // Fungsi firebase
+    function logout() {
+        signOut(auth).then(() => {
+          // Sign-out successful.
+          alert("Logout successful");
+          history.replace('/login');
+        }).catch((error) => {
+          // An error happened.
+          console.log(error);
+        });
+    }
+
+
     const [items, setItems] = useState<string[]>([]);
 
     const generateItems = () => {
@@ -33,7 +60,7 @@ const Home: React.FC = () => {
             </IonHeader>
             <IonContent className="ion-padding">
                 <IonMenuToggle>
-                    <IonItem lines="full" routerLink="/profile">
+                    <IonItem lines="full" routerLink="/profile" className="sidebar-item">
                         <IonAvatar slot="start">
                             <img src="https://i.pinimg.com/736x/a9/a6/39/a9a639dcf7f91a7d733a8f5fafe0a668.jpg" alt="NingBao" />
                         </IonAvatar>
@@ -44,11 +71,11 @@ const Home: React.FC = () => {
                     </IonItem>
                 </IonMenuToggle>
                 <IonList lines="none">
-                    <IonItem href="#">
+                    <IonItem href="#" className="sidebar-item">
                         <IonIcon aria-hidden={true} icon={settings} slot="start" color="dark"></IonIcon>
                         <IonLabel>Settings</IonLabel>
                     </IonItem>
-                    <IonItem href="#">
+                    <IonItem className="sidebar-item" button onClick={() => logout()}>
                         <IonIcon aria-hidden={true} icon={logOut} slot="start" color="dark"></IonIcon>
                         <IonLabel>Logout</IonLabel>
                     </IonItem>

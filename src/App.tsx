@@ -1,10 +1,6 @@
 import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import Home1 from './pages/Home1';
-import Home from './pages/Home';
-import ViewMessage from './pages/ViewMessage';
-import Chat from './pages/Chat';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -24,9 +20,16 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+
+/* Page components */
+import Home1 from './pages/Home1';
+import Home from './pages/Home';
+import ViewMessage from './pages/ViewMessage';
+import Chat from './pages/Chat';
 import Profile from './pages/Profile';
 import ProfileEdit from './pages/ProfileEdit';
 import ProfileOther from './pages/ProfileOther';
+import Login from './pages/Login';
 
 setupIonicReact();
 
@@ -43,8 +46,11 @@ const App: React.FC = () => (
         <Route path="/home1" exact={true}>
           <Home1 />
         </Route>
-        <Route path="/home" exact={true}>
+        <Route path="/home">
           <Home />
+        </Route>
+        <Route path="/login">
+          <Login />
         </Route>
         <Route path="/chat">
            <Chat />
