@@ -8,18 +8,31 @@ ion-label {
   margin-bottom: 12px;
 }
 
-ion-list {
+/* ion-list {
   margin-top: 12px;
   margin-bottom: 12px;
-}
+  max-width: 100%;
+} */
 
-.chat-item p {
+.chat-item .chat1 {
   background-color: #4D8B4C;
   color: white;
   padding: 7px;
   border: solid #4D8B4C;
   border-radius: 20px;
-  margin: 0px;
+  margin: 3px;
+  max-width: 100%;
+}
+.chat-item .chat2 {
+  display: flex;
+  justify-content: flex-end;
+  background-color: rgb(221, 221, 221);
+  color: black;
+  padding: 7px;
+  border: solid rgb(221, 221, 221);
+  border-radius: 20px;
+  margin: 3px;
+  max-width: 100%;
 }
 
 /* ion-item p {
@@ -39,14 +52,21 @@ ion-list {
   color: #c9c9ca;
 }
 
-.chat-item ion-note {
-  font-size: 2px;
+.chat1 ion-note {
+  font-size: smaller;
   font-weight: normal;
   color: whitesmoke;
 }
 
+.chat2 ion-note {
+  font-size: smaller;
+  font-weight: normal;
+  color: black;
+}
+
 .chat-item ion-note.md {
   margin-right: 14px;
+  font-size: smaller;
 }
 
 .dot {

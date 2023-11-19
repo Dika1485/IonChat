@@ -1,0 +1,19 @@
+ion-footer ion-toolbar{
+    padding: 10px;
+}
+ion-col div {
+    background-color: rgb(221, 221, 221);
+    color: black;
+    padding: 0px;
+    border: solid rgb(221, 221, 221);
+    border-radius: 20px;
+    margin: 0px;
+}
+.footer-content {
+    display: flex;
+    align-items: center;
+}  
+.ion-input-wrapper {
+    flex-grow: 1;
+}
+  

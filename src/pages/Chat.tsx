@@ -18,10 +18,13 @@ import {
   IonInput,
   IonRow,
   IonCol,
+  IonFooter,
+  IonTitle,
 } from '@ionic/react';
-import { personCircle } from 'ionicons/icons';
+import { logoIonic, personCircle, sendOutline } from 'ionicons/icons';
 import { useParams } from 'react-router';
 import './ViewMessage.css';
+import './Chat.css';
 import ChatListItem from '../components/ChatListItem';
 
 function Chat() {
@@ -47,7 +50,7 @@ function Chat() {
             <IonBackButton defaultHref="/home"></IonBackButton>
           </IonButtons>
           <IonButtons slot="end">
-            <IonButton href="/otherprofile/1">NingBao<IonAvatar className="ion-padding"><img src="https://i.pinimg.com/736x/a9/a6/39/a9a639dcf7f91a7d733a8f5fafe0a668.jpg" alt="NingBao" /></IonAvatar></IonButton>
+            <IonButton href="/otherprofile/1"><span style={{ textTransform: 'none' }}>NingBao</span><IonAvatar className="ion-padding"><img src="https://i.pinimg.com/736x/a9/a6/39/a9a639dcf7f91a7d733a8f5fafe0a668.jpg" alt="NingBao" /></IonAvatar></IonButton>
           </IonButtons>
         </IonToolbar>
       </IonHeader>
@@ -56,7 +59,7 @@ function Chat() {
         <IonList className="ion-padding">
           {messages.map(m => <ChatListItem key={m.id} message={m} />)}
         </IonList>
-        <IonToolbar className='search-bar'>
+        {/* <IonToolbar className='search-bar'>
           <IonRow>
           <IonCol>
             <IonInput placeholder='Enter Text'></IonInput>
@@ -67,8 +70,22 @@ function Chat() {
           </IonButtons>
           </IonCol>
           </IonRow>
-        </IonToolbar>
+        </IonToolbar> */}
       </IonContent>
+      <IonFooter translucent={true}>
+        <IonToolbar color={'light'}>
+        <IonRow className='footer-content'>
+          <IonCol>
+            <div>
+            <IonInput placeholder='Enter Text' className='ion-input-wrapper'></IonInput>
+            </div>
+          </IonCol>
+          <IonCol size='0.5'>
+            <IonIcon icon={sendOutline} size='large'></IonIcon>
+          </IonCol>
+          </IonRow>
+        </IonToolbar>
+      </IonFooter>
     </IonPage>
   );
 }
