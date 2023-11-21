@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Message, getMessage, getMessages } from '../data/messages';
+import { Message, getMessage, getMessages } from '../data/messageswithningbao';
 import {
   IonBackButton,
   IonButtons,
@@ -20,6 +20,7 @@ import {
   IonCol,
   IonFooter,
   IonTitle,
+  IonCard,
 } from '@ionic/react';
 import { logoIonic, personCircle, sendOutline } from 'ionicons/icons';
 import { useParams } from 'react-router';
@@ -50,12 +51,13 @@ function Chat() {
             <IonBackButton defaultHref="/home"></IonBackButton>
           </IonButtons>
           <IonButtons slot="end">
-            <IonButton href="/otherprofile/1"><span style={{ textTransform: 'none' }}>NingBao</span><IonAvatar className="ion-padding"><img src="https://i.pinimg.com/736x/a9/a6/39/a9a639dcf7f91a7d733a8f5fafe0a668.jpg" alt="NingBao" /></IonAvatar></IonButton>
+            <IonButton href="/otherprofile/1"><span style={{ textTransform: 'none' }}>NingBao🤍</span><IonAvatar className="ion-padding"><img src="https://lh3.googleusercontent.com/drive-viewer/AK7aPaAWqGc5fn-udFh9apq9nsqYkCST_UIQnIYN8sFOGIYu7LZ7QtuebmWDCsUrXmlKK62DvvTzFDV88Wh33fjWVCmw0W7EDg=w1366-h651" alt="NingBao" /></IonAvatar></IonButton>
           </IonButtons>
         </IonToolbar>
       </IonHeader>
 
-      <IonContent fullscreen>
+      {/* <IonContent fullscreen> */}
+        <IonCard>
         <IonList className="ion-padding">
           {messages.map(m => <ChatListItem key={m.id} message={m} />)}
         </IonList>
@@ -71,7 +73,8 @@ function Chat() {
           </IonCol>
           </IonRow>
         </IonToolbar> */}
-      </IonContent>
+        </IonCard>
+      {/* </IonContent> */}
       <IonFooter translucent={true}>
         <IonToolbar color={'light'}>
         <IonRow className='footer-content'>
@@ -80,7 +83,7 @@ function Chat() {
             <IonInput placeholder='Enter Text' className='ion-input-wrapper'></IonInput>
             </div>
           </IonCol>
-          <IonCol size='0.5'>
+          <IonCol size='fixed'>
             <IonIcon icon={sendOutline} size='large'></IonIcon>
           </IonCol>
           </IonRow>

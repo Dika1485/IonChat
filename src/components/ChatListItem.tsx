@@ -22,16 +22,27 @@ const ChatListItem: React.FC<MessageListItemProps> = ({ message }) => {
     incrementI();
   }, []); // Menambahkan dependensi kosong agar useEffect hanya dijalankan setelah mount
   
-  const chatClass = i % 2 === 0 ? 'chat2' : 'chat1';
+  let chatClass;
+  if (message.fromName === "NingBao") {
+    chatClass = 'chat2';
+  } else if (message.fromName==="") {
+    chatClass = 'chat3';
+  } else {
+    chatClass = 'chat1';
+  }
   return (
     <IonItem detail={false} lines='none' className='chat-item'>
-      <IonList className='ion-text-wrap chat1'>
+      <IonList className={`ion-text-wrap ${chatClass}`}>
         {/* <p className="ion-text-wrap"> */}
-          {message.subject}
+        {chatClass !== 'chat3' && (
+          <>
+            {message.subject}
+          </>
+        )}
         {/* sasjijjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjaaaaaaaaaaaaaaaaaaaaasssssssssssssssssssssssssjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj */}
         {/* <p> */}
         {/* <br /> */}
-        &emsp;
+        &nbsp;&nbsp;&nbsp;
           <span className="date">
             <IonNote><sub>{message.date}</sub></IonNote>
           </span>

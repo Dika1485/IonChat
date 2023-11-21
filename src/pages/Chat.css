@@ -7,7 +7,8 @@ ion-col div {
     padding: 0px;
     border: solid rgb(221, 221, 221);
     border-radius: 20px;
-    margin: 0px;
+    /* margin: 0px; */
+    margin-bottom: 10px;
 }
 .footer-content {
     display: flex;
@@ -16,4 +17,20 @@ ion-col div {
 .ion-input-wrapper {
     flex-grow: 1;
 }
-  
+ion-card{
+    overflow: scroll;
+    height: 100%;
+    /* Hide scrollbar */
+    -webkit-overflow-scrolling: touch;
+    &::-webkit-scrollbar { /* Safari & Chrome */
+        display: none;
+    }
+    -ms-overflow-style: none; /* IE 10+ */
+    /* scrollbar-width: none; Firefox */
+    /* Rounded corners */
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    margin: 0;
+}

@@ -19,9 +19,10 @@ ion-label {
   color: white;
   padding: 7px;
   border: solid #4D8B4C;
-  border-radius: 20px;
+  border-radius: 15px;
   margin: 3px;
-  max-width: 100%;
+  max-width: 95%;
+  margin-left: auto;
 }
 .chat-item .chat2 {
   display: flex;
@@ -30,9 +31,21 @@ ion-label {
   color: black;
   padding: 7px;
   border: solid rgb(221, 221, 221);
-  border-radius: 20px;
+  border-radius: 15px;
   margin: 3px;
-  max-width: 100%;
+  max-width: 95%;
+}
+
+.chat-item .chat3 {
+  background-color: lightgrey;
+  color: black;
+  padding: 1px;
+  border: solid lightgrey;
+  border-radius: 12px;
+  margin: 3px;
+  max-width: 70%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* ion-item p {
@@ -59,6 +72,12 @@ ion-label {
 }
 
 .chat2 ion-note {
+  font-size: smaller;
+  font-weight: normal;
+  color: black;
+}
+
+.chat3 ion-note {
   font-size: smaller;
   font-weight: normal;
   color: black;
