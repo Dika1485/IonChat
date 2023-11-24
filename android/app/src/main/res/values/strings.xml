@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Ion Chat</string>
+    <string name="title_activity_main">Ion Chat</string>
+    <string name="package_name">com.ionic.ionchat</string>
+    <string name="custom_url_scheme">com.ionic.ionchat</string>
+    <string name="server_client_id">557295454798-gk95p09dce563lq6aeq9sjtk6o18igdj.apps.googleusercontent.com</string>
+</resources>

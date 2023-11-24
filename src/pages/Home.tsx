@@ -6,6 +6,7 @@ import { chatbubbleEllipses, logOut, settings } from "ionicons/icons";
 import { app, getDB } from '../firebaseConfig';
 import { getAuth, signOut } from 'firebase/auth';
 import { useHistory } from "react-router";
+import { GoogleAuth } from "@codetrix-studio/capacitor-google-auth";
 
 // Initialize firebase
 app;
@@ -13,24 +14,19 @@ app;
 const Home: React.FC = () => {
     const history = useHistory();
 
-    // Cek apakah user sudah login
+    // Fungsi Firebase
     const auth = getAuth();
-    if (auth.currentUser == null) {
-        history.replace('/login');
-    }
-
-    // Fungsi firebase
+    console.log(auth);
     function logout() {
         signOut(auth).then(() => {
-          // Sign-out successful.
-          alert("Logout successful");
+          GoogleAuth.signOut();
+          alert('Logout successful!');
           history.replace('/login');
         }).catch((error) => {
           // An error happened.
           console.log(error);
         });
     }
-
 
     const [items, setItems] = useState<string[]>([]);
 
