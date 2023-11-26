@@ -97,6 +97,15 @@ ion-title {
     width: 95%;
 }
 
+.modalNew{
+    /* max-width: 80vw;
+    margin: auto; */
+    /* border-radius: 10px;
+    overflow: hidden;
+    padding: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+}
+
 .sidebar-item {
     --border-radius: 10px;
     --padding-start: 10px;

@@ -1,8 +1,8 @@
-import { IonAvatar, IonBackButton, IonButton, IonButtons, IonCard, IonCardContent, IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonLabel, IonList, IonMenu, IonMenuButton, IonMenuToggle, IonNote, IonPage, IonSearchbar, IonTitle, IonToolbar } from "@ionic/react";
+import { IonAvatar, IonBackButton, IonButton, IonButtons, IonCard, IonCardContent, IonCol, IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonInput, IonItem, IonLabel, IonList, IonMenu, IonMenuButton, IonMenuToggle, IonModal, IonNote, IonPage, IonRow, IonSearchbar, IonTitle, IonToolbar } from "@ionic/react";
 import './List.css';
 import logo from '../assets/logo_bw.svg';
 import { useEffect, useState } from "react";
-import { add, chatbubbleEllipses, checkboxSharp, checkmark, checkmarkSharp, closeSharp, logOut, sendOutline, settings } from "ionicons/icons";
+import { add, chatbubbleEllipses, checkboxSharp, checkmark, checkmarkSharp, closeSharp, logOut, search, sendOutline, settings } from "ionicons/icons";
 import { app, getDB } from '../firebaseConfig';
 import { getAuth, signOut } from 'firebase/auth';
 import { useHistory } from "react-router";
@@ -13,6 +13,7 @@ app;
 
 const List: React.FC = () => {
     const history = useHistory();
+    const [showModal, setShowModal] = useState(false);
 
     // Fungsi Firebase
     const auth = getAuth();
@@ -26,6 +27,10 @@ const List: React.FC = () => {
           // An error happened.
           console.log(error);
         });
+    }
+    function newFriend() {
+        history.push('profile/other');
+        setShowModal(false);
     }
 
     const [items, setItems] = useState<string[]>([]);
@@ -95,7 +100,7 @@ const List: React.FC = () => {
                     <IonSearchbar showClearButton="focus"></IonSearchbar>
                 </IonToolbar>
             </IonHeader>
-            <IonFab slot="fixed" vertical="bottom" horizontal="end">
+            <IonFab slot="fixed" vertical="bottom" horizontal="end" id="newfriend" onClick={() => setShowModal(true)}>
                 <IonFabButton color="main">
                     <IonIcon icon={add} color="light"></IonIcon>
                 </IonFabButton>
@@ -190,6 +195,26 @@ const List: React.FC = () => {
                 </IonCardContent>
             </IonCard>
         </IonPage>
+        <IonModal trigger="newfriend" isOpen={showModal} onDidDismiss={() => setShowModal(false)} className="modalNew">
+            <IonHeader>
+                <IonToolbar>
+                    <IonButtons slot="start" onClick={() => setShowModal(false)} >
+                        <IonBackButton defaultHref="/list"></IonBackButton>
+                    </IonButtons>
+                    <IonTitle>New Friend</IonTitle>
+                </IonToolbar>
+            </IonHeader>
+            <IonContent class="ion-padding">
+                <IonItem>
+                    <IonInput label="Username" labelPlacement="floating" required placeholder="Insert Username..." type="text"></IonInput>
+                </IonItem>
+                <IonRow>
+                    <IonCol>
+                        <IonButton type="button" color="success" expand="block" shape="round" onClick={() => newFriend()}><IonIcon icon={search}></IonIcon> Search</IonButton>
+                    </IonCol>
+                </IonRow>
+            </IonContent>
+        </IonModal>
         </>
     );
 };
