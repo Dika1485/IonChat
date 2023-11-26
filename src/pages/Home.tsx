@@ -27,6 +27,10 @@ const Home: React.FC = () => {
           console.log(error);
         });
     }
+    function toList() {
+        history.push('/list');
+        // history.replace('/login');
+    }
 
     const [items, setItems] = useState<string[]>([]);
 
@@ -92,7 +96,7 @@ const Home: React.FC = () => {
                     <IonSearchbar showClearButton="focus"></IonSearchbar>
                 </IonToolbar>
             </IonHeader>
-            <IonFab slot="fixed" vertical="bottom" horizontal="end">
+            <IonFab slot="fixed" vertical="bottom" horizontal="end" onClick={() => toList()}>
                 <IonFabButton color="main">
                     <IonIcon icon={chatbubbleEllipses} color="light"></IonIcon>
                 </IonFabButton>

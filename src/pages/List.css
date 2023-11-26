@@ -1,0 +1,80 @@
+html {
+    background-color: var(--ion-color-main);
+}
+
+ion-toolbar {
+    --color: white;
+    --background: var(--ion-color-main);
+}
+
+ion-title {
+    text-align: center;
+    margin-left: -50px;
+}
+
+.search-bar {
+    padding: 20px;
+}
+
+.search-bar ion-searchbar {
+    --border-radius: 20px;
+}
+
+#logo-white {
+    font-size: 48px;
+    padding-top: 20px;
+}
+
+#logo-white-small {
+    font-size: 24px;
+    padding-right: 10px;
+}
+
+.home-card {
+    overflow: scroll;
+    height: 600px;
+    /* Hide scrollbar */
+    -webkit-overflow-scrolling: touch;
+    &::-webkit-scrollbar { /* Safari & Chrome */
+        display: none;
+    }
+    -ms-overflow-style: none; /* IE 10+ */
+    scrollbar-width: none; /* Firefox */
+    /* Rounded corners */
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    margin: 0;
+}
+
+.home-item .status {
+    float: right;
+    align-items: center;
+    display: flex;
+}
+
+.status ion-note{
+    /* background-color: lightgrey; */
+    color: grey;
+    padding: 5px;
+    border: 2px solid grey;
+    border-radius: 12px;
+    margin: 3px;
+    /* max-width: 70%; */
+    /* margin-left: auto; */
+    /* margin-right: auto; */
+}
+
+.home-item p {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 95%;
+}
+
+.sidebar-item {
+    --border-radius: 10px;
+    --padding-start: 10px;
+    --padding-end: 10px;
+}
