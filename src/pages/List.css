@@ -54,11 +54,35 @@ ion-title {
     display: flex;
 }
 
+.status .accept{
+    background-color: #5cb85c;
+    color: white;
+    padding: 5px;
+    border: 2px solid;
+    border-radius: 12px;
+    margin: 3px;
+    /* max-width: 70%; */
+    /* margin-left: auto; */
+    /* margin-right: auto; */
+}
+
+.status .decline{
+    background-color: #d9534f;
+    color: white;
+    padding: 5px;
+    border: 2px solid;
+    border-radius: 12px;
+    margin: 3px;
+    /* max-width: 70%; */
+    /* margin-left: auto; */
+    /* margin-right: auto; */
+}
+
 .status ion-note{
     /* background-color: lightgrey; */
-    color: grey;
+    color: white;
     padding: 5px;
-    border: 2px solid grey;
+    border: 2px solid;
     border-radius: 12px;
     margin: 3px;
     /* max-width: 70%; */
@@ -77,4 +101,7 @@ ion-title {
     --border-radius: 10px;
     --padding-start: 10px;
     --padding-end: 10px;
+}
+ion-card div{
+    margin-bottom: 20px;
 }

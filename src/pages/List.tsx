@@ -1,8 +1,8 @@
-import { IonAvatar, IonBackButton, IonButtons, IonCard, IonCardContent, IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonLabel, IonList, IonMenu, IonMenuButton, IonMenuToggle, IonNote, IonPage, IonSearchbar, IonTitle, IonToolbar } from "@ionic/react";
+import { IonAvatar, IonBackButton, IonButton, IonButtons, IonCard, IonCardContent, IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonLabel, IonList, IonMenu, IonMenuButton, IonMenuToggle, IonNote, IonPage, IonSearchbar, IonTitle, IonToolbar } from "@ionic/react";
 import './List.css';
 import logo from '../assets/logo_bw.svg';
 import { useEffect, useState } from "react";
-import { chatbubbleEllipses, logOut, settings } from "ionicons/icons";
+import { add, chatbubbleEllipses, checkboxSharp, checkmark, checkmarkSharp, closeSharp, logOut, sendOutline, settings } from "ionicons/icons";
 import { app, getDB } from '../firebaseConfig';
 import { getAuth, signOut } from 'firebase/auth';
 import { useHistory } from "react-router";
@@ -32,7 +32,7 @@ const List: React.FC = () => {
 
     const generateItems = () => {
         const newItems = [];
-        for (let i = 0; i < 60; i++) {
+        for (let i = 0; i < 3; i++) {
         newItems.push(`Item ${1 + items.length + i}`);
         }
         setItems([...items, ...newItems]);
@@ -95,13 +95,15 @@ const List: React.FC = () => {
                     <IonSearchbar showClearButton="focus"></IonSearchbar>
                 </IonToolbar>
             </IonHeader>
-            {/* <IonFab slot="fixed" vertical="bottom" horizontal="end">
+            <IonFab slot="fixed" vertical="bottom" horizontal="end">
                 <IonFabButton color="main">
-                    <IonIcon icon={chatbubbleEllipses} color="light"></IonIcon>
+                    <IonIcon icon={add} color="light"></IonIcon>
                 </IonFabButton>
-            </IonFab> */}
+            </IonFab>
             <IonCard className="home-card">
                 <IonCardContent>
+                    <div>
+                        <h2>Request</h2>
                     <IonList lines="none">
                         {items.map((item, index) => (
                         <IonItem key={item} className="home-item" routerLink="/profile/other">
@@ -113,7 +115,12 @@ const List: React.FC = () => {
                                 <h2>
                                     {/* {item} */}
                                     <span className="status">
-                                        <IonNote>Friend</IonNote>
+                                        <IonButton className="accept" fill="clear" routerLink="/profile/chat">
+                                            <IonIcon icon={checkmarkSharp} color="white"></IonIcon>
+                                        </IonButton>
+                                        <IonButton className="decline" fill="clear" routerLink="/list">
+                                            <IonIcon icon={closeSharp} color="white"></IonIcon>
+                                        </IonButton>
                                     </span>
                                 </h2>
                                 {/* <p>
@@ -123,6 +130,55 @@ const List: React.FC = () => {
                         </IonItem>
                         ))}
                     </IonList>
+                    </div>
+                    <div>
+                        <h2>Pending</h2>
+                    <IonList lines="none">
+                        {items.map((item, index) => (
+                        <IonItem key={item} className="home-item" routerLink="/profile/other">
+                            <IonAvatar slot="start">
+                            <img src={'https://picsum.photos/80/80?random=' + index} alt="avatar" />
+                            </IonAvatar>
+                            <h2>{item}</h2>
+                            <IonLabel className="ion-text-wrap">
+                                <h2>
+                                    {/* {item} */}
+                                    <span className="status">
+                                        {/* <IonNote>Pending</IonNote> */}
+                                    </span>
+                                </h2>
+                                {/* <p>
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                                </p> */}
+                            </IonLabel>
+                        </IonItem>
+                        ))}
+                    </IonList>
+                    </div>
+                    <div>
+                        <h2>Friend</h2>
+                    <IonList lines="none">
+                        {items.map((item, index) => (
+                        <IonItem key={item} className="home-item" routerLink="/chat">
+                            <IonAvatar slot="start">
+                            <img src={'https://picsum.photos/80/80?random=' + index} alt="avatar" />
+                            </IonAvatar>
+                            <h2>{item}</h2>
+                            <IonLabel className="ion-text-wrap">
+                                <h2>
+                                    {/* {item} */}
+                                    <span className="status">
+                                        {/* <IonNote>Friend</IonNote> */}
+                                    </span>
+                                </h2>
+                                {/* <p>
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                                </p> */}
+                            </IonLabel>
+                        </IonItem>
+                        ))}
+                    </IonList>
+                    </div>
                     {/* <IonInfiniteScroll
                         onIonInfinite={(ev) => {
                         generateItems();
