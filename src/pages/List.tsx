@@ -28,9 +28,17 @@ const List: React.FC = () => {
           console.log(error);
         });
     }
+    const [usernameInput, setUsernameInput] = useState("");
+
     function newFriend() {
-        history.push('profile/other');
-        setShowModal(false);
+        if (usernameInput === "notfound") {
+            // Show modal with "Username not found" message
+            setShowModal(true);
+        } else {
+            // Navigate to the profile/other page for other cases
+            history.push('profile/other');
+            setShowModal(false);
+        }
     }
 
     const [items, setItems] = useState<string[]>([]);
@@ -196,7 +204,9 @@ const List: React.FC = () => {
             </IonCard>
         </IonPage>
         <IonModal trigger="newfriend" isOpen={showModal} onDidDismiss={() => setShowModal(false)} className="modalNew">
-            <IonHeader>
+            {/* <IonCard className="modalContent"> */}
+            {/* <div className="wrapper"> */}
+            <IonHeader className="ion-no-border">
                 <IonToolbar>
                     <IonButtons slot="start" onClick={() => setShowModal(false)} >
                         <IonBackButton defaultHref="/list"></IonBackButton>
@@ -206,14 +216,21 @@ const List: React.FC = () => {
             </IonHeader>
             <IonContent class="ion-padding">
                 <IonItem>
-                    <IonInput label="Username" labelPlacement="floating" required placeholder="Insert Username..." type="text"></IonInput>
+                    <IonInput value={usernameInput} onIonChange={(e) => setUsernameInput(e.detail.value!)} label="Username" labelPlacement="floating" required placeholder="Insert Username..." type="text"></IonInput>
                 </IonItem>
+                {usernameInput === "notfound" ? (
+                <IonItem lines="none">
+                    <IonLabel color="danger">Username not found!!</IonLabel>
+                </IonItem>
+                ) : (<></>)}
                 <IonRow>
                     <IonCol>
                         <IonButton type="button" color="success" expand="block" shape="round" onClick={() => newFriend()}><IonIcon icon={search}></IonIcon> Search</IonButton>
                     </IonCol>
                 </IonRow>
             </IonContent>
+            {/* </div> */}
+            {/* </IonCard> */}
         </IonModal>
         </>
     );
