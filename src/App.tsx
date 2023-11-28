@@ -30,6 +30,7 @@ import Profile from './pages/Profile';
 import ProfileEdit from './pages/ProfileEdit';
 import ProfileOther from './pages/ProfileOther';
 import Login from './pages/Login';
+import UserCheck from './pages/UserCheck';
 
 setupIonicReact();
 
@@ -51,6 +52,9 @@ const App: React.FC = () => (
         </Route>
         <Route path="/login">
           <Login />
+        </Route>
+        <Route path="/usercheck">
+          <UserCheck />
         </Route>
         <Route path="/chat">
            <Chat />
