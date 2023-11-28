@@ -135,11 +135,11 @@ const Home: React.FC = () => {
         if (auth.currentUser == null) {
             history.replace('/login');
         }
-        getUserInfo();
     });
 
     useEffect(() => {
         setLoading(true);
+        getUserInfo();
         if (userInfo.username == null) {
             return;
         }
@@ -219,7 +219,7 @@ const Home: React.FC = () => {
                 <IonCardContent>
                     <IonList lines="none">
                         {chats.map((chat, index) => (
-                        <IonItem key={index} className="home-item" routerLink="/chat">
+                        <IonItem key={index} className="home-item" routerLink={'/chat/' + chat.chatID}>
                             <IonAvatar slot="start">
                             <img src={chat.otherProfilePic} alt="avatar" />
                             </IonAvatar>
