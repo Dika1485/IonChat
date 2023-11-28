@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Message, getMessage, getMessages } from '../data/messageswithningbao';
+import { useEffect, useState } from 'react';
+// import { Message, getMessage, getMessages } from '../data/messageswithningbao';
 import {
   IonBackButton,
   IonButtons,
@@ -22,27 +22,113 @@ import {
   IonTitle,
   IonCard,
   IonCardContent,
+  useIonViewDidEnter,
 } from '@ionic/react';
 import { logoIonic, personCircle, sendOutline } from 'ionicons/icons';
-import { useParams } from 'react-router';
-import './ViewMessage.css';
+import { RouteComponentProps, useHistory, useParams } from 'react-router';
 import './Chat.css';
 import ChatListItem from '../components/ChatListItem';
+import { getAuth } from 'firebase/auth';
+import { ref, child, get, onValue } from 'firebase/database';
+import { getDB } from '../firebaseConfig';
 
-function Chat() {
 
-    const [messages, setMessages] = useState<Message[]>([]);
-  
-    useIonViewWillEnter(() => {
-      const msgs = getMessages();
-      setMessages(msgs);
+const Chat: React.FC = () => {
+  const params = useParams<{ id: string }>();
+  const history = useHistory();
+  const [userInfo, setUserInfo] = useState({});
+  const [otherUserInfo, setOtherUserInfo] = useState({});
+  const [messages, setMessages] = useState([]);
+  const auth = getAuth();
+
+  function getUserInfo() {
+    const email = auth.currentUser?.email;
+    const dbRef = ref(getDB());
+    get(child(dbRef, `registered_emails`))
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          const result = snapshot.val();
+          result.forEach(user => {
+            if (user.email == email) {
+              get(child(dbRef, `users/${user.username}`))
+                .then((snapshot) => {
+                  if (snapshot.exists()) {
+                    let userinfo = snapshot.val();
+                    userinfo['username'] = user.username;
+                    if (JSON.stringify(userinfo) != JSON.stringify(userInfo)) {
+                      setUserInfo(userinfo);
+                    }
+                  }
+                }).catch((error) => {
+                  console.error(error);
+                });
+            }
+          });
+        } else {
+            console.log("No data available");
+        }
+      }).catch((error) => {
+          console.error(error);
+      });
+  }
+
+  function getOtherProfile(chatID) {
+    const dbRef = ref(getDB(), `chats/${chatID}`);
+    onValue(dbRef, (snapshot) => {
+      const chatInfo = snapshot.val();
+      let otherUser = {username: '', profilePic: ''};
+      let otherUsername = '';
+      chatInfo.members.forEach(username => {
+        if (username != userInfo.username) {
+          otherUsername = username;
+        }
+      });
+      otherUser['username'] = otherUsername;
+      const dbRef2 = ref(getDB(), `users/${otherUsername}`);
+      onValue(dbRef2, (snapshot2) => {
+        const user = snapshot2.val();
+        otherUser['profilePic'] = user.profilePic;
+      });
+      if (JSON.stringify(otherUser) != JSON.stringify(otherUserInfo)) {
+        setOtherUserInfo(otherUser);
+      }
     });
-  
-    const refresh = (e: CustomEvent) => {
-      setTimeout(() => {
-        e.detail.complete();
-      }, 3000);
-    };
+  }
+
+  function getMessages(chatID) {
+    const dbRef = ref(getDB(), `messages/${chatID}`);
+    onValue(dbRef, (snapshot) => {
+      const msg_tmp = snapshot.val();
+      if (JSON.stringify(msg_tmp) != JSON.stringify(messages)) {
+        setMessages(msg_tmp);
+      }
+    });
+  }
+
+  // useIonViewWillEnter(() => {
+  //   const msgs = getMessages();
+  //   setMessages(msgs);
+  // });
+
+  // const refresh = (e: CustomEvent) => {
+  //   setTimeout(() => {
+  //     e.detail.complete();
+  //   }, 3000);
+  // };
+
+  useIonViewDidEnter(() => {
+    if (auth.currentUser == null) {
+      history.replace('/login');
+    }
+  });
+
+  useEffect(() => {
+    getUserInfo();
+    getOtherProfile(params.id);
+    getMessages(params.id);
+  });
+
+  console.log(messages);
 
   return (
     <IonPage id="view-message-page">
@@ -52,32 +138,15 @@ function Chat() {
             <IonBackButton defaultHref="/home"></IonBackButton>
           </IonButtons>
           <IonButtons slot="end">
-            <IonButton href="/otherprofile/1"><span style={{ textTransform: 'none' }}>NingBao🤍</span><IonAvatar className="ion-padding"><img src="https://lh3.googleusercontent.com/drive-viewer/AK7aPaAWqGc5fn-udFh9apq9nsqYkCST_UIQnIYN8sFOGIYu7LZ7QtuebmWDCsUrXmlKK62DvvTzFDV88Wh33fjWVCmw0W7EDg=w1366-h651" alt="NingBao" /></IonAvatar></IonButton>
+            <IonButton href="/otherprofile/1"><span style={{ textTransform: 'none' }}>{otherUserInfo.username}</span><IonAvatar className="ion-padding"><img src={otherUserInfo.profilePic} alt="Other user avatar" /></IonAvatar></IonButton>
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-
-      {/* <IonContent fullscreen> */}
         <IonCard>
-          {/* <IonCardContent> */}
         <IonList className="ion-padding">
-          {messages.map(m => <ChatListItem key={m.id} message={m} />)}
+          {messages.map((m, i) => <ChatListItem key={i} message={m} sender={otherUserInfo.username} />)}
         </IonList>
-        {/* <IonToolbar className='search-bar'>
-          <IonRow>
-          <IonCol>
-            <IonInput placeholder='Enter Text'></IonInput>
-          </IonCol>
-          <IonCol>
-          <IonButtons>
-            <IonButton>Send</IonButton>
-          </IonButtons>
-          </IonCol>
-          </IonRow>
-        </IonToolbar> */}
-        {/* </IonCardContent> */}
         </IonCard>
-      {/* </IonContent> */}
       <IonFooter translucent={true}>
         <IonToolbar color={'light'}>
         <IonRow className='footer-content'>

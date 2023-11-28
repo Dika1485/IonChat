@@ -14,6 +14,7 @@ app;
 
 const Home: React.FC = () => {
     const history = useHistory();
+    const [dummy, setDummy] = useState(null);
     const [isLoading, setLoading] = useState(false);
     const [userInfo, setUserInfo] = useState({});
     const [chatIDs, setChatIDs] = useState([]);
@@ -35,7 +36,9 @@ const Home: React.FC = () => {
                                     if (snapshot.exists()) {
                                         let userinfo = snapshot.val();
                                         userinfo['username'] = user.username;
-                                        setUserInfo(userinfo);
+                                        if (JSON.stringify(userinfo) != JSON.stringify(userInfo)) {
+                                            setUserInfo(userinfo);
+                                        }
                                     }
                                 }).catch((error) => {
                                     console.error(error);
@@ -78,13 +81,28 @@ const Home: React.FC = () => {
     }
 
     function getChats(chatIDs) {
-        let chats_tmp = [];
         let unsubscribers_tmp = [];
         chatIDs.forEach(chatID => {
             const dbRef = ref(getDB(), `chats/${chatID}`);
             const unsubscriber = onValue(dbRef, (snapshot) => {
                 let latestChat = snapshot.val();
                 latestChat['chatID'] = chatID;
+
+                // Timestamp
+                let date_now = new Date().getDate();
+                let datetime = new Date(latestChat['lastTimestamp']);
+                let diff_days = date_now - datetime.getDate();
+                if (diff_days == 0) {
+                    const formatter = new Intl.DateTimeFormat('id-ID', { timeStyle: 'short' });
+                    latestChat['lastTimestamp'] = formatter.format(datetime);
+                } else if (diff_days == 1) {
+                    latestChat['lastTimestamp'] = 'Yesterday';
+                } else {
+                    const formatter = new Intl.DateTimeFormat('id-ID', { dateStyle: 'short'});
+                    latestChat['lastTimestamp'] = formatter.format(datetime);
+                }
+
+                // Other username
                 let otherUsername = '';
                 latestChat.members.forEach(username => {
                     if (username != userInfo.username) {
@@ -92,18 +110,23 @@ const Home: React.FC = () => {
                     }
                 });
                 latestChat['otherUsername'] = otherUsername;
-                const dbRef2 = ref(getDB(), `users/${otherUsername}`);
-                onValue(dbRef2, (snapshot2) => {
-                    let otherUser = snapshot2.val();
-                    latestChat['otherProfilePic'] = otherUser.profilePic;
+
+                // Push to array
+                let chats_tmp = structuredClone(chats);
+                let i = chats_tmp.findIndex((chat) => chat.chatID == chatID);
+                if (i == -1) {
                     chats_tmp.push(latestChat);
-                });
+                } else {
+                    chats_tmp[i] = latestChat;
+                }
+                chats_tmp.sort(sortLatestChat);
+                if (JSON.stringify(chats) != JSON.stringify(chats_tmp)) {
+                    setChats(chats_tmp);
+                }
             });
             unsubscribers_tmp.push(unsubscriber);
         });
-        chats_tmp.sort(sortLatestChat);
-        if (JSON.stringify(chats) != JSON.stringify(chats_tmp)) {
-            setChats(chats_tmp);
+        if (JSON.stringify(unsubscribers_tmp) != JSON.stringify(unsubscribers)) {
             setUnsubscribers(unsubscribers_tmp);
         }
     }
@@ -154,7 +177,7 @@ const Home: React.FC = () => {
         }
         getChats(chatIDs);
         setLoading(false);
-    }, [userInfo, chatIDs, chats]);
+    }, [userInfo, chatIDs]);
 
     console.log(chats);
 
@@ -221,7 +244,7 @@ const Home: React.FC = () => {
                         {chats.map((chat, index) => (
                         <IonItem key={index} className="home-item" routerLink={'/chat/' + chat.chatID}>
                             <IonAvatar slot="start">
-                            <img src={chat.otherProfilePic} alt="avatar" />
+                            <img src={chat.profilePics[chat.otherUsername]} alt="avatar" />
                             </IonAvatar>
                             <IonLabel className="ion-text-wrap">
                                 <h2>

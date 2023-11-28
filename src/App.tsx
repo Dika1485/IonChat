@@ -22,9 +22,7 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 
 /* Page components */
-import Home1 from './pages/Home1';
 import Home from './pages/Home';
-import ViewMessage from './pages/ViewMessage';
 import Chat from './pages/Chat';
 import Profile from './pages/Profile';
 import ProfileEdit from './pages/ProfileEdit';
@@ -42,12 +40,6 @@ const App: React.FC = () => (
         <Route path="/" exact={true}>
           <Redirect to="/login" />
         </Route>
-        <Route path="/message/:id">
-           <ViewMessage />
-        </Route>
-        <Route path="/home1" exact={true}>
-          <Home1 />
-        </Route>
         <Route path="/home">
           <Home />
         </Route>
@@ -57,7 +49,7 @@ const App: React.FC = () => (
         <Route path="/usercheck">
           <UserCheck />
         </Route>
-        <Route path="/chat">
+        <Route path="/chat/:id">
            <Chat />
         </Route>
         <Route path="/list">
