@@ -156,7 +156,9 @@ const Chat: React.FC = () => {
             </div>
           </IonCol>
           <IonCol size='fixed'>
+            <IonButtons>
             <IonIcon icon={sendOutline} size='large'></IonIcon>
+            </IonButtons>
           </IonCol>
           </IonRow>
         </IonToolbar>
