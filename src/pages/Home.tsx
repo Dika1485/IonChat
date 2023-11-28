@@ -72,6 +72,10 @@ const Home: React.FC = () => {
             }
         });
     }
+    function toList() {
+        history.push('/list');
+        // history.replace('/login');
+    }
 
     function getChats(chatIDs) {
         let chats_tmp = [];
@@ -205,7 +209,7 @@ const Home: React.FC = () => {
                     <IonSearchbar showClearButton="focus"></IonSearchbar>
                 </IonToolbar>
             </IonHeader>
-            <IonFab slot="fixed" vertical="bottom" horizontal="end">
+            <IonFab slot="fixed" vertical="bottom" horizontal="end" onClick={() => toList()}>
                 <IonFabButton color="main">
                     <IonIcon icon={chatbubbleEllipses} color="light"></IonIcon>
                 </IonFabButton>

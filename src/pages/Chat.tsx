@@ -21,6 +21,7 @@ import {
   IonFooter,
   IonTitle,
   IonCard,
+  IonCardContent,
 } from '@ionic/react';
 import { logoIonic, personCircle, sendOutline } from 'ionicons/icons';
 import { useParams } from 'react-router';
@@ -45,7 +46,7 @@ function Chat() {
 
   return (
     <IonPage id="view-message-page">
-      <IonHeader translucent>
+      <IonHeader translucent className="ion-no-border">
         <IonToolbar>
           <IonButtons slot="start">
             <IonBackButton defaultHref="/home"></IonBackButton>
@@ -58,6 +59,7 @@ function Chat() {
 
       {/* <IonContent fullscreen> */}
         <IonCard>
+          {/* <IonCardContent> */}
         <IonList className="ion-padding">
           {messages.map(m => <ChatListItem key={m.id} message={m} />)}
         </IonList>
@@ -73,6 +75,7 @@ function Chat() {
           </IonCol>
           </IonRow>
         </IonToolbar> */}
+        {/* </IonCardContent> */}
         </IonCard>
       {/* </IonContent> */}
       <IonFooter translucent={true}>
