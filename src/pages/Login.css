@@ -17,7 +17,7 @@ ion-icon{
     display: block;
     margin: auto; */
 }
-ion-button{
+.listLogin ion-button{
     background-color: #4D8B4C;
     color: white;
     padding: 3px;
