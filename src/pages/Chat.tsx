@@ -29,7 +29,7 @@ import { RouteComponentProps, useHistory, useParams } from 'react-router';
 import './Chat.css';
 import ChatListItem from '../components/ChatListItem';
 import { getAuth } from 'firebase/auth';
-import { ref, child, get, onValue } from 'firebase/database';
+import { ref, child, get, onValue, set, update } from 'firebase/database';
 import { getDB } from '../firebaseConfig';
 
 
@@ -39,6 +39,7 @@ const Chat: React.FC = () => {
   const [userInfo, setUserInfo] = useState({});
   const [otherUserInfo, setOtherUserInfo] = useState({});
   const [messages, setMessages] = useState([]);
+  const [text, setText] = useState('');
   const auth = getAuth();
 
   function getUserInfo() {
@@ -98,9 +99,22 @@ const Chat: React.FC = () => {
   function getMessages(chatID) {
     const dbRef = ref(getDB(), `messages/${chatID}`);
     onValue(dbRef, (snapshot) => {
-      const msg_tmp = snapshot.val();
-      if (JSON.stringify(msg_tmp) != JSON.stringify(messages)) {
-        setMessages(msg_tmp);
+      if (snapshot.exists()) {
+        const msg_tmp = snapshot.val();
+        const db = getDB();
+        if (messages.length > 0) {
+          if (!msg_tmp[messages.length-1].isRead && msg_tmp[messages.length-1].sender != userInfo.username) {
+            update(ref(db, `messages/${chatID}/${messages.length-1}`), {
+              isRead: true
+            });
+            update(ref(db, `chats/${chatID}`), {
+              lastNotRead: false
+            });
+          }
+        }
+        if (JSON.stringify(msg_tmp) != JSON.stringify(messages)) {
+          setMessages(msg_tmp);
+        }
       }
     });
   }
@@ -116,6 +130,36 @@ const Chat: React.FC = () => {
   //   }, 3000);
   // };
 
+  function sendText() {
+    if (text == '') {
+      return;
+    }
+    
+    const db = getDB();
+    const datetime = new Date().toString();
+    set(ref(db, `messages/${params.id}/${messages.length}`), {
+      isRead: false,
+      message: text,
+      photoPath: '',
+      sender: userInfo.username,
+      timestamp: datetime
+    });
+    
+    set(ref(db, `chats/${params.id}`), {
+      lastMessage: text,
+      lastNotRead: true,
+      lastSender: userInfo.username,
+      lastTimestamp: datetime,
+      members: [userInfo.username, otherUserInfo.username],
+      profilePics: {
+        [userInfo.username]: userInfo.profilePic,
+        [otherUserInfo.username]: otherUserInfo.profilePic
+      }
+    });
+
+    setText('');
+  }
+
   useIonViewDidEnter(() => {
     if (auth.currentUser == null) {
       history.replace('/login');
@@ -127,8 +171,7 @@ const Chat: React.FC = () => {
     getOtherProfile(params.id);
     getMessages(params.id);
   });
-
-  console.log(messages);
+  console.log(messages.length);
 
   return (
     <IonPage id="view-message-page">
@@ -152,13 +195,13 @@ const Chat: React.FC = () => {
         <IonRow className='footer-content'>
           <IonCol>
             <div>
-            <IonInput placeholder='Enter Text' className='ion-input-wrapper'></IonInput>
+            <IonInput placeholder='Enter Text' className='ion-input-wrapper' onIonChange={(e: any) => setText(e.target.value)}></IonInput>
             </div>
           </IonCol>
           <IonCol size='fixed'>
-            <IonButtons>
-            <IonIcon icon={sendOutline} size='large'></IonIcon>
-            </IonButtons>
+            <IonButton fill='clear' onClick={() => sendText()}>
+              <IonIcon icon={sendOutline} size='large'></IonIcon>
+            </IonButton>
           </IonCol>
           </IonRow>
         </IonToolbar>
