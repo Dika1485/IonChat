@@ -171,7 +171,6 @@ const Chat: React.FC = () => {
     getOtherProfile(params.id);
     getMessages(params.id);
   });
-  console.log(messages.length);
 
   return (
     <IonPage id="view-message-page">

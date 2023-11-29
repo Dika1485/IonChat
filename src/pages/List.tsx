@@ -7,6 +7,7 @@ import { app, getDB } from '../firebaseConfig';
 import { getAuth, signOut } from 'firebase/auth';
 import { useHistory } from "react-router";
 import { GoogleAuth } from "@codetrix-studio/capacitor-google-auth";
+import { child, get, onValue, ref } from "firebase/database";
 
 // Initialize firebase
 app;
@@ -14,20 +15,140 @@ app;
 const List: React.FC = () => {
     const history = useHistory();
     const [showModal, setShowModal] = useState(false);
-
-    // Fungsi Firebase
+    const [userInfo, setUserInfo] = useState({});
+    const [sentRequests, setSentRequests] = useState({});
+    const [receivedRequests, setReceivedRequests] = useState({});
+    const [friends, setFriends] = useState([]);
+    const [sentList, setSentList] = useState([]);
+    const [receivedList, setReceivedList] = useState([]);
+    const [friendList, setFriendList] = useState([]);
+    const [unsubscribers, setUnsubscribers] = useState([]);
     const auth = getAuth();
-    console.log(auth);
-    function logout() {
-        signOut(auth).then(() => {
-          GoogleAuth.signOut();
-          alert('Logout successful!');
-          history.replace('/login');
-        }).catch((error) => {
-          // An error happened.
-          console.log(error);
+
+    function getUserInfo() {
+        const email = auth.currentUser?.email;
+        const dbRef = ref(getDB());
+        get(child(dbRef, `registered_emails`))
+            .then((snapshot) => {
+                if (snapshot.exists()) {
+                    const result = snapshot.val();
+                    result.forEach(user => {
+                        if (user.email == email) {
+                            get(child(dbRef, `users/${user.username}`))
+                                .then((snapshot) => {
+                                    if (snapshot.exists()) {
+                                        let userinfo = snapshot.val();
+                                        userinfo['username'] = user.username;
+                                        if (JSON.stringify(userinfo) != JSON.stringify(userInfo)) {
+                                            setUserInfo(userinfo);
+                                        }
+                                    }
+                                }).catch((error) => {
+                                    console.error(error);
+                                });
+                        }
+                    });
+                } else {
+                    console.log("No data available");
+                }
+            }).catch((error) => {
+                console.error(error);
+            });
+    }
+
+    function getFriendsRealtime() {
+        const dbRef = ref(getDB(), `users/${userInfo.username}/friends`);
+        const unsubscriber = onValue(dbRef, (snapshot) => {
+            if (snapshot.exists()) {
+                const friends_tmp = snapshot.val();
+                if (JSON.stringify(friends_tmp) != JSON.stringify(friends)) {
+                    setFriends(friends_tmp);
+                    setFriendList([]);
+                }
+            }
+        });
+        setUnsubscribers([...unsubscribers, unsubscriber]);
+    }
+
+    function getSentRequestsRealtime() {
+        const dbRef = ref(getDB(), `users/${userInfo.username}/sentRequests`);
+        const unsubscriber = onValue(dbRef, (snapshot) => {
+            if (snapshot.exists()) {
+                const sentRequests_tmp = snapshot.val();
+                if (JSON.stringify(sentRequests_tmp) != JSON.stringify(sentRequests)) {
+                    setSentRequests(sentRequests_tmp);
+                }
+            }
+        });
+        setUnsubscribers([...unsubscribers, unsubscriber]);
+    }
+
+    function getReceivedRequestsRealtime() {
+        const dbRef = ref(getDB(), `users/${userInfo.username}/receivedRequests`);
+        const unsubcriber = onValue(dbRef, (snapshot) => {
+            if (snapshot.exists()) {
+                const receivedRequests_tmp = snapshot.val();
+                if (JSON.stringify(receivedRequests_tmp) != JSON.stringify(receivedRequests)) {
+                    setReceivedRequests(receivedRequests_tmp);
+                }
+            }
+        });
+        setUnsubscribers([...unsubscribers, unsubcriber]);
+    }
+
+    function getFriendList() {
+        const dbRef = ref(getDB());
+        friends.forEach(friend => {
+            get(child(dbRef, `users/${friend.username}`))
+                .then((snapshot) => {
+                    if (snapshot.exists()) {
+                        const user = snapshot.val();
+                        user.username = friend.username;
+                        user.chatID = friend.chatID;
+                        if (!friendList.find((element) => element.username == friend.username)) {
+                            setFriendList([...friendList, user]);
+                        }
+                    }
+                });
         });
     }
+
+    function getSentList() {
+        const dbRef = ref(getDB());
+        Object.keys(sentRequests).forEach(friendUsername => {
+            if (sentRequests[friendUsername]) {
+                get(child(dbRef, `users/${friendUsername}`))
+                    .then((snapshot) => {
+                        if (snapshot.exists()) {
+                            const user = snapshot.val();
+                            user.username = friendUsername;
+                            if (!sentList.find((element) => element.username == friendUsername)) {
+                                setSentList([...sentList, user]);
+                            }
+                        }
+                    });
+            }
+        });
+    }
+
+    function getReceivedList() {
+        const dbRef = ref(getDB());
+        Object.keys(receivedRequests).forEach(friendUsername => {
+            if (receivedRequests[friendUsername]) {
+                get(child(dbRef, `users/${friendUsername}`))
+                    .then((snapshot) => {
+                        if (snapshot.exists()) {
+                            const user = snapshot.val();
+                            user.username = friendUsername;
+                            if (!receivedList.find((element) => element.username == friendUsername)) {
+                                setReceivedList([...receivedList, user]);
+                            }
+                        }
+                    });
+            }
+        });
+    }
+    
     const [usernameInput, setUsernameInput] = useState("");
 
     function newFriend() {
@@ -52,45 +173,24 @@ const List: React.FC = () => {
     };
 
     useEffect(() => {
-        generateItems();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+        getUserInfo();
+        if (unsubscribers.length > 0) {
+            unsubscribers.forEach(unsubscriber => {
+                unsubscriber();
+            });
+        }
+        getFriendsRealtime();
+        getSentRequestsRealtime();
+        getReceivedRequestsRealtime();
+        getFriendList();
+        getSentList();
+        getReceivedList();
+    }, [userInfo, friends, sentRequests, receivedRequests, friendList, sentList, receivedList]);
+
+    console.log(friendList);
 
     return (
         <>
-        <IonMenu contentId="main-content">
-            <IonHeader className="ion-no-border">
-                <IonToolbar>
-                    <IonTitle>
-                        <IonIcon id="logo-white-small" src={logo} aria-hidden={true}></IonIcon>
-                        Ion Chat
-                    </IonTitle>
-                </IonToolbar>
-            </IonHeader>
-            <IonContent className="ion-padding">
-                <IonMenuToggle>
-                    <IonItem lines="full" routerLink="/profile" className="sidebar-item">
-                        <IonAvatar slot="start">
-                            <img src="https://i.pinimg.com/736x/a9/a6/39/a9a639dcf7f91a7d733a8f5fafe0a668.jpg" alt="NingBao" />
-                        </IonAvatar>
-                        <IonLabel>
-                            <h2><b>Ning Bao</b></h2>
-                            <p>ningbao@gmail.com</p>
-                        </IonLabel>
-                    </IonItem>
-                </IonMenuToggle>
-                <IonList lines="none">
-                    <IonItem href="#" className="sidebar-item">
-                        <IonIcon aria-hidden={true} icon={settings} slot="start" color="dark"></IonIcon>
-                        <IonLabel>Settings</IonLabel>
-                    </IonItem>
-                    <IonItem className="sidebar-item" button onClick={() => logout()}>
-                        <IonIcon aria-hidden={true} icon={logOut} slot="start" color="dark"></IonIcon>
-                        <IonLabel>Logout</IonLabel>
-                    </IonItem>
-                </IonList>
-            </IonContent>
-        </IonMenu>
         <IonPage id="main-content">
             <IonHeader className="ion-no-border">
                 <IonToolbar>
@@ -117,89 +217,70 @@ const List: React.FC = () => {
                 <IonCardContent>
                     <div>
                         <h2>Request</h2>
-                    <IonList lines="none">
-                        {items.map((item, index) => (
-                        <IonItem key={item} className="home-item" routerLink="/profile/other">
-                            <IonAvatar slot="start">
-                            <img src={'https://picsum.photos/80/80?random=' + index} alt="avatar" />
-                            </IonAvatar>
-                            <h2>{item}</h2>
-                            <IonLabel className="ion-text-wrap">
-                                <h2>
-                                    {/* {item} */}
-                                    <span className="status">
-                                        <IonButton className="accept" fill="clear" routerLink="/profile/chat">
-                                            <IonIcon icon={checkmarkSharp} color="white"></IonIcon>
-                                        </IonButton>
-                                        <IonButton className="decline" fill="clear" routerLink="/list">
-                                            <IonIcon icon={closeSharp} color="white"></IonIcon>
-                                        </IonButton>
-                                    </span>
-                                </h2>
-                                {/* <p>
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                </p> */}
-                            </IonLabel>
-                        </IonItem>
-                        ))}
-                    </IonList>
+                        {(receivedList.length == 0) ?
+                            (<h3 align='center'>There are currently no friend requests</h3>) :
+                            (
+                                <IonList lines='none'>
+                                    {receivedList.map((user, index) => (
+                                        <IonItem key={index} className="home-item" routerLink="/profile/other">
+                                            <IonAvatar slot="start">
+                                                <img src="tes" alt="avatar" />
+                                            </IonAvatar>
+                                            <h2>Tes</h2>
+                                            <IonLabel className="ion-text-wrap">
+                                                <h2>
+                                                    <span className="status">
+                                                        <IonButton className="accept" fill="clear" routerLink="/profile/chat">
+                                                            <IonIcon icon={checkmarkSharp} color="white"></IonIcon>
+                                                        </IonButton>
+                                                        <IonButton className="decline" fill="clear" routerLink="/list">
+                                                            <IonIcon icon={closeSharp} color="white"></IonIcon>
+                                                        </IonButton>
+                                                    </span>
+                                                </h2>
+                                            </IonLabel>
+                                        </IonItem>
+                                    ))}
+                                </IonList>
+                            )
+                        }
                     </div>
                     <div>
                         <h2>Pending</h2>
-                    <IonList lines="none">
-                        {items.map((item, index) => (
-                        <IonItem key={item} className="home-item" routerLink="/profile/other">
-                            <IonAvatar slot="start">
-                            <img src={'https://picsum.photos/80/80?random=' + index} alt="avatar" />
-                            </IonAvatar>
-                            <h2>{item}</h2>
-                            <IonLabel className="ion-text-wrap">
-                                <h2>
-                                    {/* {item} */}
-                                    <span className="status">
-                                        {/* <IonNote>Pending</IonNote> */}
-                                    </span>
-                                </h2>
-                                {/* <p>
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                </p> */}
-                            </IonLabel>
-                        </IonItem>
-                        ))}
-                    </IonList>
+                        {(sentList.length == 0) ?
+                            (<h3 align='center'>You have not sent any friend requests</h3>) :
+                            (
+                                <IonList lines="none">
+                                    {sentList.map((user, index) => (
+                                        <IonItem key={index} className="home-item" routerLink="/profile/other">
+                                            <IonAvatar slot="start">
+                                                <img src="tes" alt="avatar" />
+                                            </IonAvatar>
+                                            <h2>Tes</h2>
+                                        </IonItem>
+                                    ))}
+                                </IonList>
+                            )
+                        }
                     </div>
                     <div>
                         <h2>Friend</h2>
-                    <IonList lines="none">
-                        {items.map((item, index) => (
-                        <IonItem key={item} className="home-item" routerLink="/chat">
-                            <IonAvatar slot="start">
-                            <img src={'https://picsum.photos/80/80?random=' + index} alt="avatar" />
-                            </IonAvatar>
-                            <h2>{item}</h2>
-                            <IonLabel className="ion-text-wrap">
-                                <h2>
-                                    {/* {item} */}
-                                    <span className="status">
-                                        {/* <IonNote>Friend</IonNote> */}
-                                    </span>
-                                </h2>
-                                {/* <p>
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                </p> */}
-                            </IonLabel>
-                        </IonItem>
-                        ))}
-                    </IonList>
+                        {(friendList.length == 0) ?
+                            (<h3 align='center'>You don't have any friends yet</h3>) :
+                            (
+                                <IonList lines="none">
+                                    {friendList.map((user, index) => (
+                                        <IonItem key={index} className="home-item" routerLink={`/chat/${user.chatID}`}>
+                                            <IonAvatar slot="start">
+                                                <img src={user.profilePic} alt="avatar" />
+                                            </IonAvatar>
+                                            <h2>{user.username}</h2>
+                                        </IonItem>
+                                    ))}
+                                </IonList>
+                            )
+                        }
                     </div>
-                    {/* <IonInfiniteScroll
-                        onIonInfinite={(ev) => {
-                        generateItems();
-                        setTimeout(() => ev.target.complete(), 500);
-                        }}
-                    >
-                        <IonInfiniteScrollContent></IonInfiniteScrollContent>
-                    </IonInfiniteScroll> */}
                 </IonCardContent>
             </IonCard>
         </IonPage>
