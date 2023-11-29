@@ -207,10 +207,6 @@ const Home: React.FC = () => {
                     </IonItem>
                 </IonMenuToggle>
                 <IonList lines="none">
-                    <IonItem href="#" className="sidebar-item">
-                        <IonIcon aria-hidden={true} icon={settings} slot="start" color="dark"></IonIcon>
-                        <IonLabel>Settings</IonLabel>
-                    </IonItem>
                     <IonItem className="sidebar-item" button onClick={() => logout()}>
                         <IonIcon aria-hidden={true} icon={logOut} slot="start" color="dark"></IonIcon>
                         <IonLabel>Logout</IonLabel>
