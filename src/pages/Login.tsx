@@ -1,6 +1,6 @@
-import { IonButton, IonContent, IonIcon, IonItem, IonLabel, IonPage, IonTitle, IonToast } from '@ionic/react';
+import { IonButton, IonContent, IonIcon, IonItem, IonLabel, IonList, IonPage, IonTitle, IonToast } from '@ionic/react';
 import './Login.css';
-import logo from '../assets/logo.svg';
+import logo from '../assets/Frame.svg';
 import { useHistory } from 'react-router';
 import { app } from '../firebaseConfig';
 import { GoogleAuthProvider, getAuth, signInWithCredential} from 'firebase/auth';
@@ -38,9 +38,16 @@ const Login: React.FC = () => {
         <>
             <IonPage>
                 <IonContent>
-                    <IonButton onClick={() => login()}>
-                        Login with Google
+                <IonList lines="none">
+                    <IonIcon id="logo" src={logo} aria-hidden={true}></IonIcon>
+                </IonList>
+                <IonList lines="none">
+                    <IonButton fill="clear" onClick={() => login()}>
+                        SIGN-IN
+                        <br />
+                        GOOGLE
                     </IonButton>
+                </IonList>
                     <IonToast
                         isOpen={toastIsOpen}
                         message={toastMsg}

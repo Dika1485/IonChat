@@ -1,11 +1,35 @@
 ion-list{
     text-align: center;
-    height: 50%;
     display: flex;
+    align-items: center;
+    /* justify-content: center; */
+}
+
+ion-item{
+    width: 70%;
+}
+
+.listMedium{
+    height: 33%;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.listLarge{
+    height: 40%;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.listSmall{
+    height: 33%;
+    /* margin: 5%; */
+    /* padding: 7%; */
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
+
 ion-icon{
     /* font-size: 100px; */
 }
