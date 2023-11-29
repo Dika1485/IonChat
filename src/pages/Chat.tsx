@@ -157,7 +157,7 @@ const Chat: React.FC = () => {
       }
     });
 
-    setText('');
+    setText("");
   }
 
   useIonViewDidEnter(() => {
@@ -170,7 +170,7 @@ const Chat: React.FC = () => {
     getUserInfo();
     getOtherProfile(params.id);
     getMessages(params.id);
-  });
+  }, [userInfo, otherUserInfo, messages]);
 
   return (
     <IonPage id="view-message-page">
@@ -194,7 +194,7 @@ const Chat: React.FC = () => {
         <IonRow className='footer-content'>
           <IonCol>
             <div>
-            <IonInput placeholder='Enter Text' className='ion-input-wrapper' onIonChange={(e: any) => setText(e.target.value)}></IonInput>
+            <IonInput placeholder='Enter Text' className='ion-input-wrapper' onIonChange={(e: any) => setText(e.target.value)} value={text}></IonInput>
             </div>
           </IonCol>
           <IonCol size='fixed'>
