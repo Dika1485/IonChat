@@ -38,10 +38,10 @@ const Login: React.FC = () => {
         <>
             <IonPage>
                 <IonContent>
-                <IonList lines="none">
+                <IonList lines="none" className='listLogin'>
                     <IonIcon id="logo" src={logo} aria-hidden={true}></IonIcon>
                 </IonList>
-                <IonList lines="none">
+                <IonList lines="none" className='listLogin'>
                     <IonButton fill="clear" onClick={() => login()}>
                         SIGN-IN
                         <br />

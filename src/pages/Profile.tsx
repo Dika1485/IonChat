@@ -2,8 +2,45 @@ import {IonImg, IonIcon,IonThumbnail, IonItem, IonText, IonCardHeader, IonCardSu
 import { useParams } from 'react-router';
 import { arrowBackOutline, colorFill } from 'ionicons/icons';
 import styles from './Profile.module.scss';
+import { app, getDB } from '../firebaseConfig';
+import { getAuth, signOut } from 'firebase/auth';
+import { GoogleAuth } from "@codetrix-studio/capacitor-google-auth";
+import { child, get, onValue, ref } from "firebase/database";
+import { useState } from 'react';
 
 const Profile: React.FC = () => {
+  const [userInfo, setUserInfo] = useState({});
+  const auth = getAuth();
+  function getUserInfo() {
+    const email = auth.currentUser?.email;
+    const dbRef = ref(getDB());
+    get(child(dbRef, `registered_emails`))
+        .then((snapshot) => {
+            if (snapshot.exists()) {
+                const result = snapshot.val();
+                result.forEach(user => {
+                    if (user.email == email) {
+                        get(child(dbRef, `users/${user.username}`))
+                            .then((snapshot) => {
+                                if (snapshot.exists()) {
+                                    let userinfo = snapshot.val();
+                                    userinfo['username'] = user.username;
+                                    if (JSON.stringify(userinfo) != JSON.stringify(userInfo)) {
+                                        setUserInfo(userinfo);
+                                    }
+                                }
+                            }).catch((error) => {
+                                console.error(error);
+                            });
+                    }
+                });
+            } else {
+                console.log("No data available");
+            }
+        }).catch((error) => {
+            console.error(error);
+        });
+    }
 
     return (
       <IonPage className={styles.home}>
@@ -25,7 +62,8 @@ const Profile: React.FC = () => {
               <IonCol size="8" sizeLg='8' sizeMd='8' sizeSm='8' sizeXl='8' sizeXs='10'>
                 <img className={styles.imageset} style={{ objectFit: "cover",
                   objectPosition: "50% 50%", position: "relative"}}
-                  src="https://docs-demo.ionic.io/assets/madison.jpg"
+                  // src="https://docs-demo.ionic.io/assets/madison.jpg"
+                  src={userInfo.profilePic}
                   alt="The Wisconsin State Capitol building in Madison, WI at night"
                 />
             </IonCol>
@@ -33,10 +71,11 @@ const Profile: React.FC = () => {
             </IonRow>
             <IonRow>
               <IonCol size="8" sizeLg='8' sizeMd='8' sizeSm='8' sizeXl='8' sizeXs='8'>
-                <IonText><h4>Name</h4><p>Your name</p></IonText>	
-                <IonText><h4>Email</h4><p>Your email</p></IonText> 
-                <IonText><h4>Username</h4><p>@sdls</p></IonText>
-                <IonText><h4>Password</h4><p>your password</p></IonText>
+                {/* <IonText><h4>Name</h4><p>{ userInfo.username }</p></IonText>	 */}
+                <IonText><h4>Email</h4><p>{ userInfo.email }</p></IonText> 
+                <IonText><h4>Username</h4><p>{ userInfo.username }</p></IonText>
+                <IonText><h4>Username</h4><p>{ userInfo.bio }</p></IonText>
+                {/* <IonText><h4>Password</h4><p>your password</p></IonText> */}
               </IonCol>
             <IonCol></IonCol>
             </IonRow>

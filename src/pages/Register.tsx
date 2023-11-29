@@ -38,10 +38,10 @@ const Register: React.FC = () => {
         <>
             <IonPage>
                 <IonContent>
-                <IonList className='listMedium' lines="none">
+                <IonList className='listRegister listMedium' lines="none">
                     <IonIcon id="logo" src={logo} aria-hidden={true}></IonIcon>
                 </IonList>
-                <IonList className='listSmall'>
+                <IonList className='listRegister listSmall'>
                     <IonItem>
                         <IonInput label="Username" labelPlacement="floating" className='ion-input-wrapper'></IonInput>
                     </IonItem>
@@ -52,7 +52,7 @@ const Register: React.FC = () => {
                         <IonInput label="Confirm Password" type='password' labelPlacement="floating" className='ion-input-wrapper'></IonInput>
                     </IonItem>
                 </IonList>
-                <IonList className='listMedium' lines="none">
+                <IonList className='listRegister listMedium' lines="none">
                     <IonButton fill="clear" onClick={() => login()}>
                         REGISTER
                     </IonButton>

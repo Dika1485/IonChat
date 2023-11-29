@@ -1,11 +1,11 @@
-ion-list{
+ion-list.listRegister{
     text-align: center;
     display: flex;
     align-items: center;
     /* justify-content: center; */
 }
 
-ion-item{
+.listSmall ion-item{
     width: 70%;
 }
 
@@ -41,7 +41,7 @@ ion-icon{
     display: block;
     margin: auto; */
 }
-ion-button{
+.listMedium ion-button{
     background-color: #4D8B4C;
     color: white;
     padding: 3px;
