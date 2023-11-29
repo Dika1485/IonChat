@@ -32,12 +32,11 @@ const Profile: React.FC = () => {
             <IonCol></IonCol>
             </IonRow>
             <IonRow>
-              <IonCol className={styles.Profil} size="8" sizeLg='8' sizeMd='8' sizeSm='8' sizeXl='8' sizeXs='8'>
-                <IonText><h3>Name</h3><p>Your name</p></IonText>	
-                <IonText><h3>Email</h3><p>Your email</p></IonText> 
-                <IonText><h3>Username</h3><p>@sdls</p></IonText>
-                <IonText><h3>Password</h3><p>your password</p></IonText>
-                <IonText><h3>Date of Birth</h3><p>your date</p></IonText>
+              <IonCol size="8" sizeLg='8' sizeMd='8' sizeSm='8' sizeXl='8' sizeXs='8'>
+                <IonText><h4>Name</h4><p>Your name</p></IonText>	
+                <IonText><h4>Email</h4><p>Your email</p></IonText> 
+                <IonText><h4>Username</h4><p>@sdls</p></IonText>
+                <IonText><h4>Password</h4><p>your password</p></IonText>
               </IonCol>
             <IonCol></IonCol>
             </IonRow>
