@@ -138,7 +138,7 @@ const Chat: React.FC = () => {
             <IonBackButton defaultHref="/home"></IonBackButton>
           </IonButtons>
           <IonButtons slot="end">
-            <IonButton href="/otherprofile/1"><span style={{ textTransform: 'none' }}>{otherUserInfo.username}</span><IonAvatar className="ion-padding"><img src={otherUserInfo.profilePic} alt="Other user avatar" /></IonAvatar></IonButton>
+            <IonButton href="/profile/other"><span style={{ textTransform: 'none' }}>{otherUserInfo.username}</span><IonAvatar className="ion-padding"><img src={otherUserInfo.profilePic} alt="Other user avatar" /></IonAvatar></IonButton>
           </IonButtons>
         </IonToolbar>
       </IonHeader>
