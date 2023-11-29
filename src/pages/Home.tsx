@@ -177,7 +177,7 @@ const Home: React.FC = () => {
         }
         getChats(chatIDs);
         setLoading(false);
-    }, [userInfo, chatIDs]);
+    }, [userInfo, chatIDs, chats]);
 
     console.log(chats);
 
