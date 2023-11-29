@@ -6,7 +6,7 @@ import { app, getDB } from '../firebaseConfig';
 import { getAuth, signOut } from 'firebase/auth';
 import { GoogleAuth } from "@codetrix-studio/capacitor-google-auth";
 import { child, get, onValue, ref } from "firebase/database";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const Profile: React.FC = () => {
   const [userInfo, setUserInfo] = useState({});
@@ -41,6 +41,13 @@ const Profile: React.FC = () => {
             console.error(error);
         });
     }
+    
+    useEffect(() => {
+      getUserInfo();
+      if (userInfo.username == null) {
+          return;
+      }
+  }, [userInfo]);
 
     return (
       <IonPage className={styles.home}>
@@ -64,7 +71,7 @@ const Profile: React.FC = () => {
                   objectPosition: "50% 50%", position: "relative"}}
                   // src="https://docs-demo.ionic.io/assets/madison.jpg"
                   src={userInfo.profilePic}
-                  alt="The Wisconsin State Capitol building in Madison, WI at night"
+                  alt="Avatar"
                 />
             </IonCol>
             <IonCol></IonCol>
@@ -74,7 +81,7 @@ const Profile: React.FC = () => {
                 {/* <IonText><h4>Name</h4><p>{ userInfo.username }</p></IonText>	 */}
                 <IonText><h4>Email</h4><p>{ userInfo.email }</p></IonText> 
                 <IonText><h4>Username</h4><p>{ userInfo.username }</p></IonText>
-                <IonText><h4>Username</h4><p>{ userInfo.bio }</p></IonText>
+                <IonText><h4>Bio</h4><p>{ userInfo.bio }</p></IonText>
                 {/* <IonText><h4>Password</h4><p>your password</p></IonText> */}
               </IonCol>
             <IonCol></IonCol>
