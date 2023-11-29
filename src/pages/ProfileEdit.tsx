@@ -5,10 +5,7 @@ import { arrowBackOutline, colorFill } from 'ionicons/icons';
 import styles from './Profile.module.scss';
 
 const ProfileEdit: React.FC = () => {
-  const modal = useRef<HTMLIonModalElement>(null);
-  function dismiss() {
-    modal.current?.dismiss();
-  }
+  
   return (
     <IonPage className={styles.home}>
       <IonHeader className='ion-no-border'>
@@ -23,7 +20,7 @@ const ProfileEdit: React.FC = () => {
       <IonContent>
         <div className={styles.topHeader}></div>
         <div className={styles.fakeTop}></div>
-		    <IonGrid fixed={true}>
+	<IonGrid fixed={true}>
           <IonRow className="ion-justify-content-center ion-text-center">
             <IonCol></IonCol>
             <IonCol size="8" sizeLg='8' sizeMd='8' sizeSm='8' sizeXl='8' sizeXs='10'>
@@ -38,31 +35,14 @@ const ProfileEdit: React.FC = () => {
           <IonRow>
             <IonCol></IonCol>
             <IonCol size="8" sizeLg='8' sizeMd='8' sizeSm='8' sizeXl='8' sizeXs='8'>
-              <IonText><h3>Name</h3></IonText>
+              <IonText><h4>Name</h4></IonText>
               <IonInput  placeholder='Enter name' autocomplete='on' value=""></IonInput>
-              <IonText><h3>Email</h3></IonText> 
+              <IonText><h4>Email</h4></IonText> 
               <IonInput  placeholder='Enter email' autocomplete='on' type='email' value=""></IonInput>
-              <IonText><h3>Username</h3></IonText>
+              <IonText><h4>Username</h4></IonText>
               <IonInput  placeholder='Enter username' autocomplete='on' maxlength={8} value=""></IonInput>
-              <IonText><h3>Password</h3></IonText>
+              <IonText><h4>Password</h4></IonText>
               <IonInput  placeholder='Enter password' autocomplete='on' type='password' value=""></IonInput>
-              <IonText><h3>Date of Birth</h3></IonText>
-              <IonButton id="open-modal" expand="block">
-                Open Modal
-              </IonButton>
-              <IonModal className={styles.exampleModal} ref={modal} trigger="open-modal">
-                <IonContent>
-                  <IonToolbar>
-                    <IonTitle>Modal</IonTitle>
-                    <IonButtons slot="end">
-                      <IonButton color="light" onClick={() => dismiss()}>
-                        Close
-                      </IonButton>
-                    </IonButtons>
-                  </IonToolbar>
-                  <IonDatetime presentation='date'></IonDatetime>
-                </IonContent>
-              </IonModal>
             </IonCol>
             <IonCol></IonCol>
           </IonRow>
