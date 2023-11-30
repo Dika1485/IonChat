@@ -15,7 +15,6 @@ app;
 const Home: React.FC = () => {
     const history = useHistory();
     const [dummy, setDummy] = useState(null);
-    const [isLoading, setLoading] = useState(false);
     const [userInfo, setUserInfo] = useState({});
     const [chatIDs, setChatIDs] = useState([]);
     const [chats, setChats] = useState([]);
@@ -161,13 +160,12 @@ const Home: React.FC = () => {
     });
 
     useEffect(() => {
-        setLoading(true);
         getUserInfo();
         if (userInfo.username == null) {
             return;
         }
         getChatIDs(userInfo.username);
-        if (chatIDs.length == 0) {
+        if (chatIDs == null || chatIDs.length == 0) {
             return;
         }
         if (unsubscribers.length > 0) {
@@ -176,7 +174,6 @@ const Home: React.FC = () => {
             });
         }
         getChats(chatIDs);
-        setLoading(false);
     }, [userInfo, chatIDs, chats]);
 
     console.log(chats);
@@ -233,7 +230,6 @@ const Home: React.FC = () => {
                     <IonIcon icon={chatbubbleEllipses} color="light"></IonIcon>
                 </IonFabButton>
             </IonFab>
-            <IonLoading isOpen={isLoading} onDidDismiss={() => setLoading(false)}></IonLoading>
             <IonCard className="home-card">
                 <IonCardContent>
                     <IonList lines="none">

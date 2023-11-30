@@ -1,13 +1,13 @@
-import { IonAvatar, IonBackButton, IonButton, IonButtons, IonCard, IonCardContent, IonCol, IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonInput, IonItem, IonLabel, IonList, IonMenu, IonMenuButton, IonMenuToggle, IonModal, IonNote, IonPage, IonRow, IonSearchbar, IonTitle, IonToolbar } from "@ionic/react";
+import { IonAvatar, IonBackButton, IonButton, IonButtons, IonCard, IonCardContent, IonCol, IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonInput, IonItem, IonLabel, IonList, IonMenu, IonMenuButton, IonMenuToggle, IonModal, IonNote, IonPage, IonRow, IonSearchbar, IonTitle, IonToolbar, useIonViewWillEnter } from "@ionic/react";
 import './List.css';
 import logo from '../assets/logo_bw.svg';
 import { useEffect, useState } from "react";
-import { add, chatbubbleEllipses, checkboxSharp, checkmark, checkmarkSharp, closeSharp, logOut, search, sendOutline, settings } from "ionicons/icons";
+import { add, chatbubbleEllipses, checkboxSharp, checkmark, checkmarkSharp, close, closeSharp, logOut, search, sendOutline, settings } from "ionicons/icons";
 import { app, getDB } from '../firebaseConfig';
 import { getAuth, signOut } from 'firebase/auth';
 import { useHistory } from "react-router";
 import { GoogleAuth } from "@codetrix-studio/capacitor-google-auth";
-import { child, get, onValue, ref } from "firebase/database";
+import { child, get, onValue, ref, remove, update } from "firebase/database";
 
 // Initialize firebase
 app;
@@ -150,15 +150,29 @@ const List: React.FC = () => {
     }
     
     const [usernameInput, setUsernameInput] = useState("");
+    const [userNotFound, setUserNotFound] = useState(false);
 
     function newFriend() {
-        if (usernameInput === "notfound") {
-            // Show modal with "Username not found" message
-            setShowModal(true);
-        } else {
-            // Navigate to the profile/other page for other cases
-            history.push('profile/other');
+        const dbRef = ref(getDB());
+        if (usernameInput == userInfo.username) {
+            history.push('/profile');
+            setUserNotFound(false);
             setShowModal(false);
+        } else {
+            get(child(dbRef, `users/${usernameInput}`))
+                .then((snapshot) => {
+                    if (snapshot.exists()) {
+                        history.push(`/profile/${usernameInput}`);
+                        setUserNotFound(false);
+                        setShowModal(false);
+                    } else {
+                        setUsernameInput("");
+                        setUserNotFound(true);
+                        setShowModal(true);
+                    }
+                }).catch((error) => {
+                    console.error(error);
+                });
         }
     }
 
@@ -171,6 +185,43 @@ const List: React.FC = () => {
         }
         setItems([...items, ...newItems]);
     };
+
+    function acceptFriend(user) {
+        const db = getDB();
+        remove(ref(db, `users/${user.username}/sentRequests`));
+        remove(ref(db, `users/${user.username}/receivedRequests`));
+        
+        // get chat id
+        get(child(ref(db), 'chats'))
+            .then((snapshot) => {
+                const chats = snapshot.val();
+                const chatLength = Object.keys(chats).length+1;
+                const userdata = {
+                    chatID: chatLength,
+                    username: userInfo.username
+                };
+                const frienddata = {
+                    chatID: chatLength,
+                    username: user.username
+                }
+                update(ref(db, `users/${userInfo.username}`), {
+                    friends: [...userInfo.friends, frienddata]
+                  });
+                update(ref(db, `users/${user.username}`), {
+                    friends: [...user.friends, userdata]
+                });
+            })
+    }
+
+    function denyFriend(user) {
+        const db = getDB();
+        remove(ref(db, `users/${user.username}/sentRequests`));
+        remove(ref(db, `users/${user.username}/receivedRequests`));
+    }
+
+    useIonViewWillEnter(() => {
+        getUserInfo();
+    });
 
     useEffect(() => {
         getUserInfo();
@@ -222,18 +273,18 @@ const List: React.FC = () => {
                             (
                                 <IonList lines='none'>
                                     {receivedList.map((user, index) => (
-                                        <IonItem key={index} className="home-item" routerLink="/profile/other">
+                                        <IonItem key={index} className="home-item" routerLink={`/profile/${user.username}`}>
                                             <IonAvatar slot="start">
-                                                <img src="tes" alt="avatar" />
+                                                <img src={user.profilePic} alt="avatar" />
                                             </IonAvatar>
-                                            <h2>Tes</h2>
+                                            <h2>{user.username}</h2>
                                             <IonLabel className="ion-text-wrap">
                                                 <h2>
                                                     <span className="status">
-                                                        <IonButton className="accept" fill="clear" routerLink="/profile/chat">
+                                                        <IonButton className="accept" fill="clear" onClick={() => acceptFriend(user)}>
                                                             <IonIcon icon={checkmarkSharp} color="white"></IonIcon>
                                                         </IonButton>
-                                                        <IonButton className="decline" fill="clear" routerLink="/list">
+                                                        <IonButton className="decline" fill="clear" onClick={() => denyFriend(user)}>
                                                             <IonIcon icon={closeSharp} color="white"></IonIcon>
                                                         </IonButton>
                                                     </span>
@@ -252,11 +303,11 @@ const List: React.FC = () => {
                             (
                                 <IonList lines="none">
                                     {sentList.map((user, index) => (
-                                        <IonItem key={index} className="home-item" routerLink="/profile/other">
+                                        <IonItem key={index} className="home-item" routerLink={`/profile/${user.username}`}>
                                             <IonAvatar slot="start">
-                                                <img src="tes" alt="avatar" />
+                                                <img src={user.profilePic} alt="avatar" />
                                             </IonAvatar>
-                                            <h2>Tes</h2>
+                                            <h2>{user.username}</h2>
                                         </IonItem>
                                     ))}
                                 </IonList>
@@ -290,7 +341,9 @@ const List: React.FC = () => {
             <IonHeader className="ion-no-border">
                 <IonToolbar>
                     <IonButtons slot="start" onClick={() => setShowModal(false)} >
-                        <IonBackButton defaultHref="/list"></IonBackButton>
+                        <IonButton>
+                            <IonIcon icon={close}></IonIcon>
+                        </IonButton>
                     </IonButtons>
                     <IonTitle>New Friend</IonTitle>
                 </IonToolbar>
@@ -299,7 +352,7 @@ const List: React.FC = () => {
                 <IonItem>
                     <IonInput value={usernameInput} onIonChange={(e) => setUsernameInput(e.detail.value!)} label="Username" labelPlacement="floating" required placeholder="Insert Username..." type="text"></IonInput>
                 </IonItem>
-                {usernameInput === "notfound" ? (
+                {userNotFound ? (
                 <IonItem lines="none">
                     <IonLabel color="danger">Username not found!!</IonLabel>
                 </IonItem>

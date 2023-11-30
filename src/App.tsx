@@ -65,7 +65,7 @@ const App: React.FC = () => (
         <Route path="/editprofile">
            <ProfileEdit />
         </Route>
-        <Route path="/profile/other">
+        <Route path="/profile/:username">
            <ProfileOther />
         </Route>
       </IonRouterOutlet>

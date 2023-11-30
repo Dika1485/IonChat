@@ -1,5 +1,5 @@
-import {IonImg, IonIcon,IonThumbnail, IonItem, IonText, IonCardHeader, IonCardSubtitle, IonCardTitle, IonHeader, IonContent, IonButtons, IonMenuButton, IonTitle, IonToolbar, IonLabel, IonAvatar, IonItemDivider, IonPage, IonCol, IonGrid, IonRow, IonCard, IonCardContent, IonButton, IonBackButton } from '@ionic/react'; 
-import { useParams } from 'react-router';
+import {IonImg, IonIcon,IonThumbnail, IonItem, IonText, IonCardHeader, IonCardSubtitle, IonCardTitle, IonHeader, IonContent, IonButtons, IonMenuButton, IonTitle, IonToolbar, IonLabel, IonAvatar, IonItemDivider, IonPage, IonCol, IonGrid, IonRow, IonCard, IonCardContent, IonButton, IonBackButton, useIonViewWillEnter } from '@ionic/react'; 
+import { useHistory, useParams } from 'react-router';
 import { arrowBackOutline, colorFill } from 'ionicons/icons';
 import styles from './Profile.module.scss';
 import { app, getDB } from '../firebaseConfig';
@@ -9,6 +9,7 @@ import { child, get, onValue, ref } from "firebase/database";
 import { useEffect, useState } from 'react';
 
 const Profile: React.FC = () => {
+  const history = useHistory();
   const [userInfo, setUserInfo] = useState({});
   const auth = getAuth();
   function getUserInfo() {
@@ -41,6 +42,10 @@ const Profile: React.FC = () => {
             console.error(error);
         });
     }
+
+    useIonViewWillEnter(() => {
+      getUserInfo();
+    });
     
     useEffect(() => {
       getUserInfo();
@@ -89,7 +94,7 @@ const Profile: React.FC = () => {
             <IonRow className="ion-justify-content-center ion-text-center">
               <IonCol></IonCol>
               <IonCol size="8" sizeLg='8' sizeMd='8' sizeSm='8' sizeXl='8' sizeXs='10'>
-                <IonButton className={styles.tombolEdit} routerLink='/editprofile'>Edit Profile</IonButton>
+                <IonButton className={styles.tombolEdit} onClick={() => history.push('/editprofile')}>Edit Profile</IonButton>
               </IonCol>
               <IonCol></IonCol>
             </IonRow>
